@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Repository("itemRepo")
+@Repository("itemRepository")
 @Slf4j
 public class InMemoryItemRepository implements ItemRepository {
     private final Map<Long, Item> itemStorageInMemory = new HashMap<>();
