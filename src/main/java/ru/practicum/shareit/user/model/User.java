@@ -3,9 +3,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.util.Objects;
 
-/**
- * TODO Sprint add-controllers.
- */
 import lombok.Data;
 
 @Data
