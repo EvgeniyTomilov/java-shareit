@@ -19,8 +19,8 @@ import java.util.stream.Collectors;
 @Service("itemService")
 @Slf4j
 public class ItemServiceImpl implements ItemService {
-    ItemRepository itemRepository;
-    UserService userService;
+    private final ItemRepository itemRepository;
+    private final UserService userService;
 
     public ItemServiceImpl(
             ItemRepository itemRepository,

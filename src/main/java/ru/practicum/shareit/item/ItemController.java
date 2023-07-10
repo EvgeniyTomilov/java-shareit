@@ -13,7 +13,7 @@ import java.util.Collection;
 @RequestMapping(path = "/items")
 @Slf4j
 public class ItemController {
-    ItemService itemService;
+    private final ItemService itemService;
 
     public ItemController(ItemService itemService) {
         this.itemService = itemService;
