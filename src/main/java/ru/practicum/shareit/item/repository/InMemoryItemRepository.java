@@ -1,5 +1,6 @@
 package ru.practicum.shareit.item.repository;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.exception.ConflictException;
@@ -9,21 +10,22 @@ import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 @Repository("itemRepository")
 @Slf4j
+@RequiredArgsConstructor
 public class InMemoryItemRepository implements ItemRepository {
-    private final Map<Long, Item> itemStorageInMemory = new HashMap<>();
-    private final Map<Long, List<Item>> itemsOfUsers = new HashMap<>();
-    private long idGenerator;
+    private final Map<Long, Item> itemStorageInMemory;
+    private final Map<Long, List<Item>> itemsOfUsers;
+    private final AtomicLong idGenerator = new AtomicLong();
 
     @Override
     public Item addItem(long userId, Item item) {
-        item.setId(++idGenerator);
+        item.setId(idGenerator.incrementAndGet());
         if (itemsOfUsers.containsKey(userId) && itemsOfUsers.get(userId).contains(item)) {
             log.warn("User id {} already has item {} ", userId, item);
             throw new ConflictException("item already exists");

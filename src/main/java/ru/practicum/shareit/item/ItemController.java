@@ -1,7 +1,6 @@
 package ru.practicum.shareit.item;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.ItemDto;
@@ -9,18 +8,17 @@ import ru.practicum.shareit.item.service.ItemService;
 
 import java.util.Collection;
 
+import static ru.practicum.shareit.util.Utils.SHARER_USER_ID;
+
+@RequiredArgsConstructor
 @RestController
 @RequestMapping(path = "/items")
 @Slf4j
 public class ItemController {
     private final ItemService itemService;
 
-    public ItemController(ItemService itemService) {
-        this.itemService = itemService;
-    }
-
     @PostMapping
-    public ItemDto add(@RequestHeader("X-Sharer-User-Id") long userId,
+    public ItemDto add(@RequestHeader(SHARER_USER_ID) long userId,
                        @RequestBody ItemDto itemDto) {
         log.info("add: {} - Started", itemDto);
         ItemDto itemDtoFromRepo = itemService.addItem(userId, itemDto);
@@ -29,7 +27,7 @@ public class ItemController {
     }
 
     @PatchMapping("/{itemId}")
-    public ItemDto update(@RequestHeader("X-Sharer-User-Id") long userId,
+    public ItemDto update(@RequestHeader(SHARER_USER_ID) long userId,
                           @PathVariable long itemId,
                           @RequestBody ItemDto itemDto) {
         log.info("Update {} for item id: {} by user id {}  - Started", itemDto, itemId, userId);
@@ -47,7 +45,7 @@ public class ItemController {
     }
 
     @GetMapping("/{itemId}")
-    public ItemDto getItem(@RequestHeader("X-Sharer-User-Id") long userId,
+    public ItemDto getItem(@RequestHeader(SHARER_USER_ID) long userId,
                            @PathVariable long itemId) {
         log.info("Search for item id {} - Started", itemId);
         ItemDto itemDto = itemService.getItem(itemId);
@@ -64,7 +62,7 @@ public class ItemController {
     }
 
     @DeleteMapping("/{itemId}")
-    public void deleteItem(@RequestHeader("X-Sharer-User-Id") long userId,
+    public void deleteItem(@RequestHeader(SHARER_USER_ID) long userId,
                            @PathVariable long itemId) {
         log.info("Delete item id {} user id {} - Started", itemId, userId);
         boolean isDel = itemService.deleteItem(userId, itemId);
