@@ -77,7 +77,7 @@ public class InMemoryItemRepository implements ItemRepository {
         itemsOfUsers.get(userId).remove(getItem(itemId));
         if (itemStorageInMemory.containsKey(userId)) {
             itemStorageInMemory.remove(itemId);
-        }else {
+        } else {
             log.warn("User {} is not found", userId);
             throw new UserNotFoundException("Пользователь id "
                     + userId + " не найден");
