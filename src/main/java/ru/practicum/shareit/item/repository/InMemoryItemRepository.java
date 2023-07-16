@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.exception.ConflictException;
 import ru.practicum.shareit.exception.ItemNotFoundException;
+import ru.practicum.shareit.exception.UserNotFoundException;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
@@ -74,7 +75,13 @@ public class InMemoryItemRepository implements ItemRepository {
     @Override
     public void deleteItem(long userId, long itemId) {
         itemsOfUsers.get(userId).remove(getItem(itemId));
-        itemStorageInMemory.remove(itemId);
+        if (itemStorageInMemory.containsKey(userId)) {
+            itemStorageInMemory.remove(itemId);
+        }else {
+            log.warn("User {} is not found", userId);
+            throw new UserNotFoundException("Пользователь id "
+                    + userId + " не найден");
+        }
     }
 
     @Override

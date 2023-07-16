@@ -27,7 +27,8 @@ public class UserServiceImpl implements UserService {
     public UserDto getUser(long id) {
         if (userRepository.getUser(id).isEmpty()) {
             log.warn("User {} is not found", id);
-            throw new UserNotFoundException("No user");
+            throw new UserNotFoundException("Пользователь id "
+                    + id + " не найден");
         }
         User user = userRepository.getUser(id).orElseThrow(() -> new UserNotFoundException("Пользователь id "
                 + id + " не найден"));
