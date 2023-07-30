@@ -15,14 +15,15 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Repository("UserRepository")
+@Deprecated
+@Repository("UserStorage")
 @Slf4j
-public class InMemoryUserRepository implements UserRepository {
+public class InMemoryUserRepository implements UserRepo {
     private final Map<Long, User> users = new HashMap<>();
     private long idGenerator = 0;
 
     @Override
-    public User addUser(User user) {
+    public User save(User user) {
         isEmailFree(user.getEmail());
         user.setId(++idGenerator);
         users.put(user.getId(), user);
@@ -30,8 +31,8 @@ public class InMemoryUserRepository implements UserRepository {
     }
 
     @Override
-    public User updateUser(User user, long id) {
-        User userStorage = getUser(id).orElseThrow(() -> {
+    public User update(User user, long id) {
+        User userStorage = findUser(id).orElseThrow(() -> {
             log.error("User Id {} is not found. Update error", id);
             throw new UserNotFoundException("User is not found");
         });
@@ -58,21 +59,23 @@ public class InMemoryUserRepository implements UserRepository {
     }
 
     @Override
-    public List<UserDto> getUsers() {
+    public List<UserDto> findAll() {
         log.info("Количество пользователей составляет: " + users.size());
         return users.values().stream()
-                .map(user -> UserMapper.makeDto(user))
+                .map(user -> UserMapper.makeDto(user)
+                        .orElseThrow(() -> new NullPointerException("dto объект не найден")))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Optional<User> getUser(long id) {
+    public Optional<User> findUser(long id) {
         return Optional.ofNullable(users.get(id));
     }
 
     @Override
-    public void deleteUser(long id) {
+    public boolean delete(long id) {
         users.remove(id);
+        return true;
     }
 
     @Override

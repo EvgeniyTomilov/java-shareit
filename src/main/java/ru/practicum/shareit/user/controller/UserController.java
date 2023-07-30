@@ -21,7 +21,7 @@ public class UserController {
     @PostMapping
     public UserDto create(@Valid @RequestBody UserDto userDto) {
         log.info("create: {} - Started", userDto);
-        UserDto user = userService.create(userDto);
+        UserDto user = userService.addUser(userDto);
         log.info("create: {} - Finished", user);
         return user;
     }
@@ -43,10 +43,10 @@ public class UserController {
     }
 
     @PatchMapping("/{userId}")
-    public UserDto update(@PathVariable("userId") long id,
-                          @RequestBody UserDto userDto) {
+    public UserDto updateUser(@PathVariable("userId") long id,
+                              @RequestBody UserDto userDto) {
         log.info("update {} for user id: {}  - Started", userDto, id);
-        UserDto user = userService.update(userDto, id);
+        UserDto user = userService.updateUser(userDto, id);
         log.info("update: {} - Finished", user);
         return user;
     }
@@ -54,7 +54,7 @@ public class UserController {
     @DeleteMapping("/{userId}")
     public void deleteUser(@PathVariable("userId") Integer userId) {
         log.info("deleteUser: {} userId - Started", userId);
-        boolean isDel = userService.delete(userId);
+        boolean isDel = userService.deleteUser(userId);
         log.info("deleteUser: {} userId - Finished {} ", userId, isDel);
     }
 }
