@@ -24,7 +24,7 @@ public class Item {
     private User owner;
     @Column(name = "name")
     private String name;
-    @Column(name = "description")
+    @Column
     private String description;
     @Column(name = "is_available")
     private Boolean isAvailable;

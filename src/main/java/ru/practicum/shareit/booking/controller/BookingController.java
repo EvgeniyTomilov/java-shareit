@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.BookingRequestDto;
 import ru.practicum.shareit.booking.dto.BookingResponseDto;
+import ru.practicum.shareit.booking.model.State;
 import ru.practicum.shareit.booking.service.BookingService;
 
 import javax.validation.Valid;
@@ -53,7 +54,7 @@ public class BookingController {
     public List<BookingResponseDto> getBookings(@RequestHeader(SHARER_USER_ID) Long bookerId,
                                                 @RequestParam(defaultValue = "ALL") String state) {
         log.info("Search user's (id {}) {} bookings - Started", bookerId, state);
-        List<BookingResponseDto> bookingsOfUser = bookingService.getBookings(bookerId, state);
+        List<BookingResponseDto> bookingsOfUser = bookingService.getBookings(bookerId, State.valueOf(state));
         log.info("{} {} bookings was found", bookingsOfUser.size(), state);
         return bookingsOfUser;
     }

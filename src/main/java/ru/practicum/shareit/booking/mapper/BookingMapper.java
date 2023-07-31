@@ -1,5 +1,6 @@
 package ru.practicum.shareit.booking.mapper;
 
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import ru.practicum.shareit.booking.dto.BookingForItemDto;
 import ru.practicum.shareit.booking.dto.BookingRequestDto;
@@ -13,6 +14,7 @@ import ru.practicum.shareit.user.model.User;
 import java.util.Optional;
 
 @Slf4j
+@UtilityClass
 public final class BookingMapper {
     public static Optional<Booking> requestDtoToEntity(BookingRequestDto dto, Item item, User booker) {
         Booking booking = new Booking();

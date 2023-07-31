@@ -6,9 +6,6 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
-/**
- * TODO Sprint add-item-requests.
- */
 @Entity
 @Getter
 @Setter
