@@ -48,7 +48,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingResponseDto> getBookings(Long bookerId, State state) {
+    public List<BookingResponseDto> getBookings(Long bookerId, String state) {
         return bookingMapperService.prepareResponseDtoList(bookerId, state);
     }
 

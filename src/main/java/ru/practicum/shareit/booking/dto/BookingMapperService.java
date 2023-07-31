@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
-import ru.practicum.shareit.booking.model.State;
 import ru.practicum.shareit.booking.model.StatusOfBooking;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.exception.BookingNotFoundException;
@@ -105,65 +104,38 @@ public final class BookingMapperService {
         }
     }
 
-    public List<BookingResponseDto> prepareResponseDtoList(Long bookerId, State state) {
+    public List<BookingResponseDto> prepareResponseDtoList(Long bookerId, String state) {
         userService.getUser(bookerId);
-        List<Booking> responseBookingList ;
+        List<Booking> responseBookingList;
 
         switch (state) {
-            case ALL:
+            case "ALL":
                 responseBookingList = bookingRepo.findByBookerIdOrderByStartDesc(bookerId);
                 break;
-            case FUTURE:
+            case "FUTURE":
                 responseBookingList = bookingRepo.findAllByBookerIdAndStartAfterOrderByStartDesc(bookerId,
                         LocalDateTime.now());
                 break;
-            case CURRENT:
+            case "CURRENT":
                 responseBookingList = bookingRepo.findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(bookerId,
                         LocalDateTime.now(), LocalDateTime.now());
                 break;
-            case PAST:
+            case "PAST":
                 responseBookingList = bookingRepo.findAllByBookerIdAndEndBeforeOrderByStartDesc(bookerId,
                         LocalDateTime.now());
                 break;
-            case WAITING:
+            case "WAITING":
+            case "REJECTED":
                 responseBookingList = bookingRepo.findAllByBookerIdOrderByStartDesc(bookerId);
                 responseBookingList = responseBookingList.stream()
-                        .filter(booking -> booking.getStatus().equals(StatusOfBooking.WAITING))
+                        .filter(booking -> booking.getStatus().equals(StatusOfBooking.valueOf(state)))
                         .collect(Collectors.toList());
                 break;
-            case REJECTED:
-                responseBookingList = bookingRepo.findAllByBookerIdOrderByStartDesc(bookerId);
-                responseBookingList = responseBookingList.stream()
-                        .filter(booking -> booking.getStatus().equals(StatusOfBooking.REJECTED))
-                        .collect(Collectors.toList());
-                break;
+
             default:
                 log.warn("Статус запроса {} не поддерживается", state);
                 throw new ValidationException("Unknown state: UNSUPPORTED_STATUS");
         }
-
-//        if (state.equals("ALL")) {
-//            responseBookingList = bookingRepo.findByBookerIdOrderByStartDesc(bookerId);
-//        } else if (state.equals("FUTURE")) {
-//            responseBookingList =
-//                    bookingRepo.findAllByBookerIdAndStartAfterOrderByStartDesc(bookerId, LocalDateTime.now());
-//        } else if (state.equals("CURRENT")) {
-//            responseBookingList =
-//                    bookingRepo.findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(bookerId,
-//                            LocalDateTime.now(), LocalDateTime.now());
-//        } else if (state.equals("PAST")) {
-//            responseBookingList =
-//                    bookingRepo.findAllByBookerIdAndEndBeforeOrderByStartDesc(bookerId, LocalDateTime.now());
-//        } else if (state.equals("WAITING") || state.equals("REJECTED")) {
-//            responseBookingList =
-//                    bookingRepo.findAllByBookerIdOrderByStartDesc(bookerId);
-//            responseBookingList = responseBookingList.stream()
-//                    .filter(booking -> booking.getStatus().equals(StatusOfBooking.valueOf(state)))
-//                    .collect(Collectors.toList());
-//        } else {
-//            log.warn("Статус запроса {} не поддерживается", state);
-//            throw new ValidationException("Unknown state: UNSUPPORTED_STATUS");
-//        }
 
         return responseBookingList.stream()
                 .map(booking -> BookingMapper.entityToResponseDto(booking)

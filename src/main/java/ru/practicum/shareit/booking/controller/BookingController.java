@@ -54,7 +54,7 @@ public class BookingController {
     public List<BookingResponseDto> getBookings(@RequestHeader(SHARER_USER_ID) Long bookerId,
                                                 @RequestParam(defaultValue = "ALL") String state) {
         log.info("Search user's (id {}) {} bookings - Started", bookerId, state);
-        List<BookingResponseDto> bookingsOfUser = bookingService.getBookings(bookerId, State.valueOf(state));
+        List<BookingResponseDto> bookingsOfUser = bookingService.getBookings(bookerId, state);
         log.info("{} {} bookings was found", bookingsOfUser.size(), state);
         return bookingsOfUser;
     }
