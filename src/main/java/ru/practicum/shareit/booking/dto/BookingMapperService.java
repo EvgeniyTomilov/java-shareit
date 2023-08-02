@@ -85,17 +85,6 @@ public final class BookingMapperService {
                 .orElseThrow(() -> new NullPointerException("dto объект не найден"));
     }
 
-    private void dateValidate(BookingRequestDto dto) {
-        if (dto.getStart().isBefore(LocalDateTime.now())) {
-            log.warn("Время начала бронирования не может быть в прошлом");
-            throw new ValidationException("StartTime can't be from the past");
-        }
-        if (dto.getEnd().isBefore(dto.getStart()) || dto.getEnd().equals(dto.getStart())) {
-            log.warn("Окончание бронирования должно быть позже начала бронирования");
-            throw new ValidationException("EndTime can be later then StartDate");
-        }
-    }
-
     public void accessVerification(Booking bookingFromRepo, Long userId) {
         if (!(bookingFromRepo.getBooker().getId().equals(userId)
                 || bookingFromRepo.getItem().getOwner().getId().equals(userId))) {
@@ -187,5 +176,16 @@ public final class BookingMapperService {
                 .map(booking -> BookingMapper.entityToResponseDto(booking)
                         .orElseThrow(() -> new NullPointerException("dto объект не найден")))
                 .collect(Collectors.toList());
+    }
+
+    private void dateValidate(BookingRequestDto dto) {
+        if (dto.getStart().isBefore(LocalDateTime.now())) {
+            log.warn("Время начала бронирования не может быть в прошлом");
+            throw new ValidationException("StartTime can't be from the past");
+        }
+        if (dto.getEnd().isBefore(dto.getStart()) || dto.getEnd().equals(dto.getStart())) {
+            log.warn("Окончание бронирования должно быть позже начала бронирования");
+            throw new ValidationException("EndTime can be later then StartDate");
+        }
     }
 }
