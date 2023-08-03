@@ -28,9 +28,9 @@ import java.util.stream.Collectors;
 @Component
 @AllArgsConstructor
 public final class BookingMapperService {
-    ItemService itemService;
-    UserService userService;
-    BookingRepository bookingRepo;
+   private ItemService itemService;
+   private UserService userService;
+   private BookingRepository bookingRepo;
 
     public Booking addStatusToBooking(Long ownerId, Long bookingId, Boolean approved) {
 
