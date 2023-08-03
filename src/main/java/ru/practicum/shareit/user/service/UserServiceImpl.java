@@ -10,51 +10,63 @@ import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-@Service("userService")
+@Service()
 @Slf4j
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
-    private final UserRepository userRepository;
+    private UserRepository userRepo;
 
     @Override
-    public UserDto create(UserDto userDto) {
-        User user = userRepository.addUser(UserMapper.makeUser(userDto));
-        return UserMapper.makeDto(user);
+    public UserDto addUser(UserDto userDto) {
+        User user = userRepo.save(UserMapper.makeUser(userDto)
+                .orElseThrow(() -> new NullPointerException("User объект не создан")));
+        return UserMapper.makeDto(user)
+                .orElseThrow(() -> new NullPointerException("dto объект не найден"));
     }
 
     @Override
     public UserDto getUser(long id) {
-        if (userRepository.getUser(id).isEmpty()) {
-            log.warn("User {} is not found", id);
-            throw new UserNotFoundException("Пользователь id "
-                    + id + " не найден");
-        }
-        User user = userRepository.getUser(id).orElseThrow(() -> new UserNotFoundException("Пользователь id "
+        User user = userRepo.findById(id).orElseThrow(() -> new UserNotFoundException("Пользователь id "
                 + id + " не найден"));
-        return UserMapper.makeDto(user);
+        return UserMapper.makeDto(user)
+                .orElseThrow(() -> new NullPointerException("dto объект не найден"));
     }
 
     @Override
     public List<UserDto> getUsers() {
-        return userRepository.getUsers();
+        return userRepo.findAll().stream()
+                .map(user -> UserMapper.makeDto(user)
+                        .orElseThrow(() -> new NullPointerException("dto объект не найден")))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public UserDto update(UserDto userDto, long id) {
-        User user = userRepository.updateUser(UserMapper.makeUser(userDto), id);
-        return UserMapper.makeDto(user);
+    public UserDto updateUser(UserDto userDto, long id) {
+        UserDto userStorage = getUser(id);
+        if (userDto.getName() != null) {
+            userStorage.setName(userDto.getName());
+        }
+        if (userDto.getEmail() != null) {
+            userStorage.setEmail(userDto.getEmail());
+        }
+        User user = UserMapper.makeUserWithId(userStorage)
+                .orElseThrow(() -> new NullPointerException("объект не найден"));
+
+        return UserMapper.makeDto(userRepo.save(user))
+                .orElseThrow(() -> new NullPointerException("dto объект не найден"));
     }
 
     @Override
-    public boolean delete(long id) {
+    public boolean deleteUser(long id) {
         getUser(id);
-        userRepository.deleteUser(id);
+        userRepo.deleteById(id);
         return true;
     }
 
     @Override
     public void clearAll() {
-        userRepository.deleteAllUser();
+        userRepo.deleteAll();
     }
 }

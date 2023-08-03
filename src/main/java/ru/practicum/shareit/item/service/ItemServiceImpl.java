@@ -1,97 +1,103 @@
 package ru.practicum.shareit.item.service;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.comment.dto.CommentDto;
+import ru.practicum.shareit.comment.dto.CommentRequestDto;
+import ru.practicum.shareit.comment.mapper.CommentMapper;
+import ru.practicum.shareit.comment.repository.CommentRepository;
 import ru.practicum.shareit.exception.IncorrectIdException;
 import ru.practicum.shareit.exception.ItemNotFoundException;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemMapperService;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.mapper.UserMapper;
+import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@AllArgsConstructor
 @Service("itemService")
 @Slf4j
 public class ItemServiceImpl implements ItemService {
-    private final ItemRepository itemRepository;
-    private final UserService userService;
+    private ItemRepository itemRepo;
+    private UserService userService;
+    private CommentRepository commentRepo;
+    private ItemMapperService itemMapperService;
 
-    public ItemServiceImpl(
-            ItemRepository itemRepository,
-            UserService userService) {
-        this.itemRepository = itemRepository;
-        this.userService = userService;
+    @Override
+    public ItemDto addNewItem(Long ownerId, ItemDto itemDto) {
+        Item itemForSave = itemMapperService.addNewItem(ownerId, itemDto);
+        Item item = itemRepo.save(itemForSave);
+        return ItemMapper.makeDtoFromItem(item)
+                .orElseThrow(() -> new NullPointerException("dto объект не найден"));
     }
 
     @Override
-    public ItemDto addItem(long userId, ItemDto itemDto) {
-        Item item = itemRepository.addItem(userId, ItemMapper.makeItem(itemDto,
-                UserMapper.makeUserWithId(userService.getUser(userId))));
-        return ItemMapper.makeDtoFromItem(item);
-    }
-
-    @Override
-    public ItemDto getItem(long itemId) {
+    public ItemDto getItem(Long itemId, Long userId) {
         validateId(itemId);
-        Item item = itemRepository.getItem(itemId);
-        return ItemMapper.makeDtoFromItem(item);
+        validateId(userId);
+        Item item = itemRepo.findById(itemId).orElseThrow(() ->
+                new ItemNotFoundException("Item is not found"));
+        return itemMapperService.getItemDto(item, userId);
     }
 
-    private void validateId(long id) {
-        if (id < 1) {
-            log.warn("id {} incorrect", id);
-            throw new IncorrectIdException("id can't be less then 1");
+    @Override
+    public List<ItemDto> getItems(Long userId) {
+        List<Item> allItems = itemRepo.findAllByOwnerIdOrderById(userId);
+        return itemMapperService.getItems(allItems);
+    }
+
+    @Override
+    public ItemDto updateItem(Long ownerId, Long itemId, ItemDto itemDtoWithUpdate) {
+        Item itemForUpdate = itemMapperService.prepareItemToUpdate(ownerId, itemId, itemDtoWithUpdate);
+        Item itemUpdated = itemRepo.save(itemForUpdate);
+        return ItemMapper.makeDtoFromItem(itemUpdated)
+                .orElseThrow(() -> new NullPointerException("dto объект не найден"));
+    }
+
+    @Override
+    public List<ItemDto> searchForItems(String text) {
+        List<ItemDto> searchResult = new ArrayList<>();
+        if (!text.isBlank()) {
+            searchResult = itemRepo.findByText(text).stream()
+                    .map(item -> ItemMapper.makeDtoFromItem(item)
+                            .orElseThrow(() -> new NullPointerException("dto объект не найден")))
+                    .collect(Collectors.toList());
         }
+        return searchResult;
     }
 
     @Override
-    public Collection<ItemDto> getItems(long userId) {
-        userService.getUser(userId);
-        return itemRepository.getItemsOfUser(userId);
+    public CommentDto addNewCommentToItem(CommentRequestDto requestDto) {
+        return CommentMapper
+                .entityToDto(commentRepo.save(itemMapperService.prepareCommentToSave(requestDto)));
     }
 
     @Override
-    public ItemDto updateItem(long userId, long itemId, ItemDto itemDtoWithUpdate) {
-        validateId(itemId);
-        ItemDto itemFromRepo = getItem(itemId);
-        if (itemFromRepo.getOwner().getId() != null && itemFromRepo.getOwner().getId() == userId) {
-            itemDtoWithUpdate.setId(itemId);
-            Item itemUpdated = itemRepository.updateItem(userId, ItemMapper.makeItemForUpdate(itemFromRepo, itemDtoWithUpdate));
-            return ItemMapper.makeDtoFromItem(itemUpdated);
-        } else {
-            log.error("User Id {} has not item", userId);
-            throw new ItemNotFoundException("Item is not found");
-        }
-    }
-
-    @Override
-    public boolean deleteItem(long userId, long itemId) {
-        userService.getUser(userId);
-        itemRepository.deleteItem(userId, itemId);
+    public boolean deleteItem(Long ownerId, Long itemId) {
+        User owner = UserMapper.makeUserWithId(userService.getUser(ownerId))
+                .orElseThrow(() -> new NullPointerException("dto объект не найден"));
+        itemRepo.delete(ItemMapper.makeItem(getItem(itemId, ownerId), owner)
+                .orElseThrow(() -> new NullPointerException("объект не найден")));
         return true;
     }
 
     @Override
     public void clearAll() {
-        itemRepository.clearAll();
+        itemRepo.deleteAll();
     }
 
-    @Override
-    public List<ItemDto> searchAvailableItems(String text) {
-        List<ItemDto> searchResult = new ArrayList<>();
-        if (!text.isBlank()) {
-            searchResult = itemRepository.getAllItems().stream()
-                    .filter(itemDto -> itemDto.getAvailable().equals(true))
-                    .filter(item -> item.getName().toLowerCase().contains(text.toLowerCase()) ||
-                            item.getDescription().toLowerCase().contains(text.toLowerCase()))
-                    .collect(Collectors.toList());
+    private void validateId(Long id) {
+        if (id < 1) {
+            log.warn("id {} incorrect", id);
+            throw new IncorrectIdException("id can't be less then 1");
         }
-        return searchResult;
     }
 }
