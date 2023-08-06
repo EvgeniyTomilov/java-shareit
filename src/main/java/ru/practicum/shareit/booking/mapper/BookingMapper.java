@@ -30,19 +30,6 @@ public final class BookingMapper {
         return Optional.of(booking);
     }
 
-//    public static Optional<Booking> updateEntity(Booking booking, BookingRequestDto dto) {
-//        if (dto.getStatus() != null) {
-//            booking.setStatus(dto.getStatus());
-//        }
-//        if (dto.getStart() != null) {
-//            booking.setStart(dto.getStart());
-//        }
-//        if (dto.getEnd() != null) {
-//            booking.setEnd(dto.getEnd());
-//        }
-//        return Optional.ofNullable(booking);
-//    }
-
     public static Optional<BookingResponseDto> entityToResponseDto(Booking entity) {
         BookingResponseDto dto = new BookingResponseDto();
 
@@ -55,23 +42,6 @@ public final class BookingMapper {
 
         return Optional.of(dto);
     }
-
-//    public static Optional<Booking> responseDtoToEntity(BookingResponseDto dto, User owner) {
-//        Booking booking = new Booking();
-//        if (dto == null) {
-//            return Optional.empty();
-//        } else {
-//            booking.setId(dto.getId());
-//            booking.setStart(dto.getStart());
-//            booking.setEnd(dto.getEnd());
-//            booking.setItem(ItemMapper.makeItem(dto.getItem(), owner)
-//                    .orElseThrow(() -> new NullPointerException("объект не найден")));
-//            booking.setStatus(dto.getStatus());
-//            booking.setBooker(UserMapper.makeUserWithId(dto.getBooker())
-//                    .orElseThrow(() -> new NullPointerException("объект не найден")));
-//        }
-//        return Optional.of(booking);
-//    }
 
     public static Optional<BookingForItemDto> entityToBookingForItemDto(Booking booking) {
         BookingForItemDto dto = new BookingForItemDto();
