@@ -1,14 +1,16 @@
 package ru.practicum.shareit.comment.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
 @ToString
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode
 public class CommentRequestDto {
     private Long authorId;
     private Long itemId;

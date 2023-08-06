@@ -33,14 +33,13 @@ public class ItemController {
         requestDto.setItemId(itemId);
 
         CommentDto commentDto = itemService.addNewCommentToItem(requestDto);
-        log.info("Comment {} added to item id: {} - Finished", commentDto.getText(), itemId);
+        log.info("Comment added to item id: {} - Finished", itemId);
         return commentDto;
     }
 
-
     @PostMapping
-    public ItemDto addItem(@RequestHeader(SHARER_USER_ID) Long ownerId,
-                           @RequestBody ItemDto itemDto) {
+    public ItemDto add(@RequestHeader(SHARER_USER_ID) Long ownerId,
+                       @RequestBody ItemDto itemDto) {
         log.info("add: {} - Started", itemDto);
         ItemDto itemDtoFromRepo = itemService.addNewItem(ownerId, itemDto);
         log.info("create: {} - Finished", itemDtoFromRepo);
@@ -48,9 +47,9 @@ public class ItemController {
     }
 
     @PatchMapping("/{itemId}")
-    public ItemDto updateItem(@RequestHeader(SHARER_USER_ID) Long userId,
-                              @PathVariable Long itemId,
-                              @RequestBody ItemDto itemDto) {
+    public ItemDto update(@RequestHeader(SHARER_USER_ID) Long userId,
+                          @PathVariable Long itemId,
+                          @RequestBody ItemDto itemDto) {
         log.info("Update {} for item id: {} by user id {}  - Started", itemDto, itemId, userId);
         ItemDto itemDtoFromRepo = itemService.updateItem(userId, itemId, itemDto);
         log.info("update: {} - Finished", itemDtoFromRepo);
@@ -86,8 +85,8 @@ public class ItemController {
     public void deleteItem(@RequestHeader(SHARER_USER_ID) Long userId,
                            @PathVariable Long itemId) {
         log.info("Delete item id {} user id {} - Started", itemId, userId);
-        boolean isDel = itemService.deleteItem(userId, itemId);
-        log.info("item id {} was deleted - {} ", itemId, isDel);
+        itemService.deleteItem(userId, itemId);
+        log.info("item id {} was deleted - {} ", itemId);
     }
 
     @DeleteMapping

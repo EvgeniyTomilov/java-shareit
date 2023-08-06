@@ -6,6 +6,10 @@ import ru.practicum.shareit.user.model.User;
 import java.util.Optional;
 
 public final class UserMapper {
+
+    private UserMapper() {
+    }
+
     public static Optional<User> makeUser(UserDto userDto) {
         User user = new User();
         if (userDto.getName() != null) {
