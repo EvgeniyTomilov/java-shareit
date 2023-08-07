@@ -1,18 +1,17 @@
-package ru.practicum.shareit.item.service;
+package ru.practicum.shareit.item.model;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.CommentRequestDto;
-import ru.practicum.shareit.item.mapper.CommentMapper;
+import ru.practicum.shareit.item.dto.CommentMapper;
 import ru.practicum.shareit.item.repository.CommentRepository;
 import ru.practicum.shareit.exception.IncorrectIdException;
 import ru.practicum.shareit.exception.ItemNotFoundException;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemMapperService;
 import ru.practicum.shareit.item.mapper.ItemMapper;
-import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
