@@ -30,9 +30,9 @@ import java.util.stream.Collectors;
 @Component
 @AllArgsConstructor
 public class BookingMapperService {
-    private ItemService itemService;
-    private UserService userService;
-    private BookingRepository bookingRepo;
+    private final ItemService itemService;
+    private final UserService userService;
+    private final BookingRepository bookingRepo;
 
     public Booking addStatusToBooking(Long ownerId, Long bookingId, Boolean approved) {
         Booking bookingFromRepo = bookingRepo.findById(bookingId)
