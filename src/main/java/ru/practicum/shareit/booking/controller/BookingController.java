@@ -1,5 +1,6 @@
 package ru.practicum.shareit.booking.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +11,8 @@ import ru.practicum.shareit.booking.service.BookingService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 import static ru.practicum.shareit.util.Utils.SHARER_USER_ID;
@@ -17,13 +20,10 @@ import static ru.practicum.shareit.util.Utils.SHARER_USER_ID;
 @Validated
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(path = "/bookings")
 public class BookingController {
-    private BookingService bookingService;
-
-    public BookingController(BookingService bookingService) {
-        this.bookingService = bookingService;
-    }
+    private final BookingService bookingService;
 
     @PostMapping
     public BookingResponseDto add(@RequestHeader(SHARER_USER_ID) Long bookerId,
@@ -55,9 +55,9 @@ public class BookingController {
 
     @GetMapping
     public List<BookingResponseDto> getBookings(@RequestHeader(SHARER_USER_ID) Long bookerId,
-                                                @Valid @RequestParam(defaultValue = "ALL") State state,
-                                                @Valid @RequestParam(required = false, defaultValue = "0") @Min(0) Integer from,
-                                                @Valid @RequestParam(required = false, defaultValue = "20") @Min(1) Integer size) {
+                                                @RequestParam(defaultValue = "ALL") State state,
+                                                @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
+                                                @RequestParam(defaultValue = "20") @Positive Integer size) {
         log.info("Search user's (id {}) {} bookings - Started", bookerId, state);
         List<BookingResponseDto> bookingsOfUser = bookingService.getBookings(bookerId, state, from, size);
         log.info("{} {} bookings was found", bookingsOfUser.size(), state);
@@ -66,9 +66,9 @@ public class BookingController {
 
     @GetMapping("/owner")
     public List<BookingResponseDto> getBookingsOwner(@RequestHeader(SHARER_USER_ID) Long ownerId,
-                                                     @Valid @RequestParam(defaultValue = "ALL") State state,
-                                                     @Valid @RequestParam(required = false, defaultValue = "0") @Min(0) Integer from,
-                                                     @Valid @RequestParam(required = false, defaultValue = "20") @Min(1) Integer size) {
+                                                     @RequestParam(defaultValue = "ALL") State state,
+                                                     @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
+                                                     @RequestParam(defaultValue = "20") @Positive Integer size) {
         log.info("Search {} bookings of owner's (id {}) items - Started", state, ownerId);
         List<BookingResponseDto> bookingsOfOwnerItems =
                 bookingService.getBookingsForOwner(ownerId, state, from, size);
