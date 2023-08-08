@@ -1,23 +1,43 @@
 package ru.practicum.shareit.item.dto;
 
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import ru.practicum.shareit.booking.dto.BookingForItemDto;
-import ru.practicum.shareit.comment.dto.CommentDto;
 
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @ToString
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode
 public class ItemDto {
-    private long id;
+    private Long id;
     private String name;
     private String description;
     private Boolean available;
-    private long ownerId;
-
+    private Long ownerId;
+    private Long requestId;
     private List<CommentDto> comments;
-
     private BookingForItemDto lastBooking;
     private BookingForItemDto nextBooking;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ItemDto)) return false;
+        ItemDto itemDto = (ItemDto) o;
+        return Objects.equals(name, itemDto.name) && Objects.equals(description, itemDto.description) && Objects.equals(ownerId, itemDto.ownerId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, description, ownerId);
+    }
 }
