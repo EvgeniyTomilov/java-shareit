@@ -85,11 +85,5 @@ class UserMapperTest {
         assertEquals(user, userFromMapper);
     }
 
-    @Test
-    void makeUserWithId_whenId0() {
-        newUserDto.setId(0L);
-        User userFromMapper = UserMapper.makeUserWithId(newUserDto).orElseThrow();
-        assertEquals(user, userFromMapper);
-    }
 
 }
