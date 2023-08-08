@@ -23,7 +23,7 @@ public class ItemRequestDto {
     @NotBlank(message = "Запрос не возможно создать без описания")
     private String description;
     private Long requesterId;
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @JsonFormat(pattern = PATTERN_DATA)
     private LocalDateTime created;
 
     private List<ItemDto> items = new ArrayList<>();
