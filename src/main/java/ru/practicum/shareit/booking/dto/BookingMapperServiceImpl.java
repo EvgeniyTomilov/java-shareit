@@ -94,6 +94,7 @@ public class BookingMapperServiceImpl implements BookingMapperService {
 
     public List<BookingResponseDto> prepareResponseDtoList(Long bookerId, State state,
                                                            Integer from, Integer size) {
+
         userService.getUser(bookerId);
         List<Booking> answerPage;
         PageRequest pageRequest = PageRequest.of(from > 0 ? from / size : 0, size);
