@@ -138,7 +138,7 @@ class ItemRequestMapperServiceTest {
                 .id(1L)
                 .build();
 
-        when(itemRepo.findAllByRequestId(1L)).thenReturn(itemsForRequest);
+        when(itemRepo.findAllByOwnerIdOrderById(1L)).thenReturn(itemsForRequest);
         assertEquals(itemRequestDto, itemRequestMapperService.prepareForReturnDto(itemRequest));
     }
 
@@ -162,7 +162,7 @@ class ItemRequestMapperServiceTest {
                 .id(1L)
                 .build();
 
-        when(itemRepo.findAllByRequestId(1L)).thenReturn(itemsForRequest);
+        when(itemRepo.findAllByOwnerIdOrderById(1L)).thenReturn(itemsForRequest);
         assertEquals(itemRequestDto, itemRequestMapperService.prepareForReturnDto(itemRequest));
     }
 

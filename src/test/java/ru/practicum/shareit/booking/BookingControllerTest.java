@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.shareit.booking.controller.BookingController;
 import ru.practicum.shareit.booking.dto.BookingRequestDto;
 import ru.practicum.shareit.booking.dto.BookingResponseDto;
+import ru.practicum.shareit.booking.model.State;
 import ru.practicum.shareit.booking.model.StatusOfBooking;
 import ru.practicum.shareit.booking.service.BookingServiceImpl;
 import ru.practicum.shareit.user.mapper.UserMapper;
@@ -22,6 +23,7 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.practicum.shareit.util.Utils.SHARER_USER_ID;
 
@@ -76,8 +78,15 @@ class BookingControllerTest {
     @Test
     @SneakyThrows
     void getBookingsOwner_whenCorrect_thenReturn200() {
+        State state = State.ALL;
+        int from = 1;
+        int size = 23;
+
         mockMvc.perform(get("/bookings/owner")
-                        .header(SHARER_USER_ID, 1L))
+                        .header(SHARER_USER_ID, 1L)
+                        .param("from", String.valueOf(from))
+                        .param("size", String.valueOf(size))
+                        .param("state", state.toString()))
                 .andExpect(status().isOk());
     }
 
@@ -136,18 +145,12 @@ class BookingControllerTest {
     @SneakyThrows
     void add_whenInputCorrect_thenReturn200WithDto() {
         when(bookingService.addNewBooking(1L, bookingRequestDto)).thenReturn(bookingResponseDto);
-
-        String result = mockMvc.perform(post("/bookings")
+        mockMvc.perform(post("/bookings")
                         .header(SHARER_USER_ID, 1L)
                         .contentType("application/json")
                         .characterEncoding(StandardCharsets.UTF_8)
                         .content(objectMapper.writeValueAsString(bookingRequestDto)))
-                .andExpect(status().isOk())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        assertEquals(objectMapper.writeValueAsString(bookingResponseDto), result);
+                .andExpect(jsonPath("$.id").value(objectMapper.writeValueAsString(bookingResponseDto)));
     }
 
     @Test

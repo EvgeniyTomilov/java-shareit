@@ -16,7 +16,7 @@ import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.controller.ItemController;
 import ru.practicum.shareit.item.model.Item;
 
-import ru.practicum.shareit.item.model.ItemServiceImpl;
+import ru.practicum.shareit.item.service.ItemServiceImpl;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
 

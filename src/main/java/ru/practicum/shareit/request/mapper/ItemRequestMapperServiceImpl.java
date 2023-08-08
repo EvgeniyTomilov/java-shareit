@@ -39,7 +39,7 @@ public class ItemRequestMapperServiceImpl implements ItemRequestMapperService {
 
     @Override
     public ItemRequestDto prepareForReturnDto(ItemRequest itemRequest) {
-        List<Item> itemsForRequest = itemRepo.findAllByRequestId(itemRequest.getId());
+        List<Item> itemsForRequest = itemRepo.findAllByOwnerIdOrderById(itemRequest.getId());
         List<ItemDto> itemsDtoForRequest = itemsForRequest.stream()
                 .map(item -> ItemMapper.makeDtoFromItem(item).get())
                 .collect(Collectors.toList());

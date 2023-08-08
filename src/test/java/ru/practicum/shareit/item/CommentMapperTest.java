@@ -24,7 +24,7 @@ class CommentMapperTest {
 
         Comment comment = new Comment(1L, "comment", item, author, created);
 
-        CommentDto commentDto = new CommentDto(1L, "comment", author.getName(), created);
+        CommentDto commentDto = new CommentDto(1L, "comment", author.getName(), created, item);
 
         CommentDto expectedComment = new CommentDto();
         expectedComment = CommentMapper.entityToDto(comment);

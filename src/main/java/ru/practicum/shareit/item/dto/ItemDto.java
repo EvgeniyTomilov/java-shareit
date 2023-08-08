@@ -1,8 +1,13 @@
 package ru.practicum.shareit.item.dto;
 
 import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import ru.practicum.shareit.booking.dto.BookingForItemDto;
 
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import java.util.List;
 import java.util.Objects;
 
@@ -19,9 +24,7 @@ public class ItemDto {
     private Boolean available;
     private Long ownerId;
     private Long requestId;
-
     private List<CommentDto> comments;
-
     private BookingForItemDto lastBooking;
     private BookingForItemDto nextBooking;
 

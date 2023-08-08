@@ -3,6 +3,7 @@ package ru.practicum.shareit.item.dto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.booking.dto.BookingForItemDto;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
@@ -22,24 +23,32 @@ import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Component
-@AllArgsConstructor
 public class ItemMapperService {
-    private UserService userService;
-    private CommentRepository commentRepo;
-    private BookingRepository bookingRepo;
-    private ItemRepository itemRepo;
-    private ItemRequestRepository itemRequestRepo;
+    private final UserService userService;
+    private final CommentRepository commentRepo;
+    private final BookingRepository bookingRepo;
+    private final ItemRepository itemRepo;
+    private final ItemRequestRepository itemRequestRepo;
+
+    @Autowired
+    public ItemMapperService(UserService userService, CommentRepository commentRepo, BookingRepository bookingRepo, ItemRepository itemRepo, ItemRequestRepository itemRequestRepo) {
+        this.userService = userService;
+        this.commentRepo = commentRepo;
+        this.bookingRepo = bookingRepo;
+        this.itemRepo = itemRepo;
+        this.itemRequestRepo = itemRequestRepo;
+    }
 
     public Item addNewItem(Long ownerId, ItemDto itemDto) {
         itemDtoValidate(ownerId, itemDto);
         User owner = UserMapper.makeUserWithId(userService.getUser(ownerId)).get();
 
-        Item item = new Item();
+        Item item = null;
 
         if (itemDto.getRequestId() == null) {
             item = ItemMapper.makeItem(itemDto, owner).get();
@@ -81,10 +90,38 @@ public class ItemMapperService {
     }
 
     public List<ItemDto> getItems(List<Item> allItems) {
-        return allItems.stream()
-                .map(item -> ItemMapper.makeDtoFromItemWithBooking(item, findCommentsToItem(item),
-                        findLastBooking(item), findNextBooking(item)).get())
-                .collect(Collectors.toList());
+
+        List<BookingForItemDto> allBookings = findAllBookings();
+        List<CommentDto> allComments = findAllComments();
+        List<ItemDto> itemDtos = new ArrayList<>();
+
+        for (Item item : allItems) {
+            BookingForItemDto nextBooking = allBookings.stream()
+                    .filter(b -> Objects.equals(b.getItem().getId(), item.getId()))
+                    .filter(b -> b.getStart().isAfter(LocalDateTime.now()))
+                    .min(Comparator.comparing(BookingForItemDto::getStart))
+                    .orElse(null);
+
+            BookingForItemDto lastBooking = allBookings.stream()
+                    .filter(b -> Objects.equals(b.getItem().getId(), item.getId()))
+                    .filter(b -> b.getStart().isBefore(LocalDateTime.now()))
+                    .max(Comparator.comparing(BookingForItemDto::getStart))
+                    .orElse(null);
+
+            List<CommentDto> allCommentsById = allComments
+                    .stream()
+                    .filter(c -> Objects.equals(c.getItem().getId(), item.getId()))
+                    .collect(Collectors.toList());
+
+            itemDtos.add(ItemMapper.makeDtoFromItemWithBooking(
+                    item,
+                    allCommentsById,
+                    lastBooking,
+                    nextBooking).orElse(null));
+        }
+
+
+        return itemDtos;
     }
 
     public ItemDto getItemDtoForUser(Item item, List<CommentDto> commentsForItemDto) {
@@ -116,6 +153,20 @@ public class ItemMapperService {
             nextBooking = BookingMapper.entityToBookingForItemDto(allNextBooking.get(0)).get();
         } else nextBooking = null;
         return nextBooking;
+    }
+
+    private List<BookingForItemDto> findAllBookings() {
+        List<Booking> allBookings = bookingRepo.findAll();
+        return allBookings.stream()
+                .map(booking -> BookingMapper.entityToBookingForItemDto(booking).orElse(null))
+                .collect(Collectors.toList());
+    }
+
+    private List<CommentDto> findAllComments() {
+        return commentRepo.findAll()
+                .stream()
+                .map(CommentMapper::entityToDto)
+                .collect(Collectors.toList());
     }
 
     private BookingForItemDto findLastBooking(Item item) {
