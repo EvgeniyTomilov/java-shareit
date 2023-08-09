@@ -16,8 +16,8 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Service
 public class ItemRequestServiceImpl implements ItemRequestService {
-    private ItemRequestMapperService itemRequestMapperService;
-    private ItemRequestRepository itemRequestRepo;
+    private final ItemRequestMapperService itemRequestMapperService;
+    private final ItemRequestRepository itemRequestRepo;
 
     @Override
     public ItemRequestDto addNewItemRequest(Long requesterId, ItemRequestDto dto) {

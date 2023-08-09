@@ -1,5 +1,6 @@
 package ru.practicum.shareit.request.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -8,6 +9,8 @@ import ru.practicum.shareit.request.service.ItemRequestService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 import static ru.practicum.shareit.util.Utils.SHARER_USER_ID;
@@ -16,12 +19,9 @@ import static ru.practicum.shareit.util.Utils.SHARER_USER_ID;
 @RestController
 @RequestMapping(path = "/requests")
 @Slf4j
+@RequiredArgsConstructor
 public class ItemRequestController {
     private final ItemRequestService itemRequestService;
-
-    public ItemRequestController(ItemRequestService itemRequestService) {
-        this.itemRequestService = itemRequestService;
-    }
 
     @PostMapping
     ItemRequestDto addRequest(@RequestHeader(SHARER_USER_ID) Long requesterId,
@@ -42,8 +42,8 @@ public class ItemRequestController {
 
     @GetMapping("/all")
     List<ItemRequestDto> getAllItemRequests(@RequestHeader(SHARER_USER_ID) Long userId,
-                                            @Valid @RequestParam(required = false, defaultValue = "0") @Min(0) Integer from,
-                                            @Valid @RequestParam(required = false, defaultValue = "20") @Min(1) Integer size) {
+                                            @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
+                                            @RequestParam(defaultValue = "20") @Positive Integer size) {
 
         log.info("Get All requests - Started");
         List<ItemRequestDto> listOfRequestsDto = itemRequestService.getAllItemRequests(userId, from, size);

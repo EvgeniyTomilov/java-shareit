@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
-    private UserRepository userRepo;
+    private final UserRepository userRepo;
 
     @Override
     public UserDto addUser(UserDto userDto) {

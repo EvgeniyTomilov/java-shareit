@@ -25,10 +25,10 @@ import java.util.stream.Collectors;
 @Service("itemService")
 @Slf4j
 public class ItemServiceImpl implements ItemService {
-    private ItemRepository itemRepo;
-    private UserService userService;
-    private CommentRepository commentRepo;
-    private ItemMapperService itemMapperService;
+    private final ItemRepository itemRepo;
+    private final UserService userService;
+    private final CommentRepository commentRepo;
+    private final ItemMapperService itemMapperService;
 
     @Override
     public ItemDto addNewItem(Long ownerId, ItemDto itemDto) {

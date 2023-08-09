@@ -29,11 +29,11 @@ import java.util.stream.Collectors;
 @Component
 @AllArgsConstructor
 public class ItemMapperService {
-    private UserService userService;
-    private CommentRepository commentRepo;
-    private BookingRepository bookingRepo;
-    private ItemRepository itemRepo;
-    private ItemRequestRepository itemRequestRepo;
+    private final UserService userService;
+    private final CommentRepository commentRepo;
+    private final BookingRepository bookingRepo;
+    private final ItemRepository itemRepo;
+    private final ItemRequestRepository itemRequestRepo;
 
     public Item addNewItem(Long ownerId, ItemDto itemDto) {
         itemDtoValidate(ownerId, itemDto);

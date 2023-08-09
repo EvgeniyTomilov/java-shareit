@@ -21,8 +21,8 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Component
 public class ItemRequestMapperServiceImpl implements ItemRequestMapperService {
-    private UserService userService;
-    private ItemRepository itemRepo;
+    private final UserService userService;
+    private final ItemRepository itemRepo;
 
     @Override
     public ItemRequest prepareForSaveItemRequest(Long requesterId, ItemRequestDto dto) {
