@@ -166,6 +166,27 @@ class ItemMapperServiceTest {
         ex.getMessage();
     }
 
+    @Test
+    void addNewItem_whenRequestIdNull_thenReturnEntityWithoutRequest() {
+        UserDto userDto = UserMapper.makeDto(userOwner).orElseThrow();
+        Item expectedItem = new Item(1L, userOwner, item.getName(),
+                item.getDescription(), true, null);
+
+        itemDtoValid.setRequestId(null);
+        when(userService.getUser(ownerId)).thenReturn(userDto);
+
+        assertEquals(expectedItem, itemMapperService.addNewItem(ownerId, itemDtoValid));
+
+    }
+
+    @Test
+    void addNewItem_whenRequestCorrect_thenReturnEntity() {
+        UserDto userDto = UserMapper.makeDto(userOwner).orElseThrow();
+        when(userService.getUser(ownerId)).thenReturn(userDto);
+        when(itemRequestRepo.findById(1L)).thenReturn(Optional.ofNullable(itemRequest));
+
+        assertEquals(item, itemMapperService.addNewItem(ownerId, itemDtoValid));
+    }
 
     @Test
     void prepareItemToUpdate_whenIdUserNotValid_thenThrowIncorrectIdException() {

@@ -1,17 +1,19 @@
 package ru.practicum.shareit.item.dto;
 
-import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
+import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
 
-
-@UtilityClass
+@Slf4j
 public final class CommentMapper {
+    private CommentMapper() {
+    }
 
-    public Comment requestToEntity(Item item, User author, String text) {
+    public static Comment requestToEntity(Item item, User author, String text) {
         Comment newComment = new Comment();
         newComment.setItem(item);
         newComment.setAuthor(author);
@@ -20,7 +22,7 @@ public final class CommentMapper {
         return newComment;
     }
 
-    public CommentDto entityToDto(Comment comment) {
+    public static CommentDto entityToDto(Comment comment) {
         CommentDto commentDto = new CommentDto();
         commentDto.setId(comment.getId());
         commentDto.setText(comment.getText());

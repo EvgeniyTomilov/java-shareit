@@ -23,7 +23,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.practicum.shareit.util.Utils.SHARER_USER_ID;
 
 @WebMvcTest(BookingController.class)
 class BookingControllerTest {
@@ -69,7 +68,7 @@ class BookingControllerTest {
     @SneakyThrows
     void getBooking_whenCorrect_thenReturn200() {
         mockMvc.perform(get("/bookings/{bookingId}", 1L)
-                        .header(SHARER_USER_ID, 1L))
+                        .header("X-Sharer-User-Id", 1L))
                 .andExpect(status().isOk());
     }
 
@@ -77,7 +76,7 @@ class BookingControllerTest {
     @SneakyThrows
     void getBookingsOwner_whenCorrect_thenReturn200() {
         mockMvc.perform(get("/bookings/owner")
-                        .header(SHARER_USER_ID, 1L))
+                        .header("X-Sharer-User-Id", 1L))
                 .andExpect(status().isOk());
     }
 
@@ -85,7 +84,7 @@ class BookingControllerTest {
     @SneakyThrows
     void getBookingsOwner_whenStateNotValid_thenReturn400() {
         mockMvc.perform(get("/bookings/owner")
-                        .header(SHARER_USER_ID, 1L)
+                        .header("X-Sharer-User-Id", 1L)
                         .param("state", "heh"))
                 .andExpect(status().isBadRequest());
     }
@@ -94,7 +93,7 @@ class BookingControllerTest {
     @SneakyThrows
     void getBookings_whenCorrect_thenReturn200() {
         mockMvc.perform(get("/bookings")
-                        .header(SHARER_USER_ID, 1L))
+                        .header("X-Sharer-User-Id", 1L))
                 .andExpect(status().isOk());
     }
 
@@ -102,7 +101,7 @@ class BookingControllerTest {
     @SneakyThrows
     void getBookings_whenStateNotValid_thenReturn400() {
         mockMvc.perform(get("/bookings")
-                        .header(SHARER_USER_ID, 1L)
+                        .header("X-Sharer-User-Id", 1L)
                         .param("state", "heh"))
                 .andExpect(status().isBadRequest());
     }
@@ -111,7 +110,7 @@ class BookingControllerTest {
     @SneakyThrows
     void getBookings_whenFromNotValid_thenReturn400() {
         mockMvc.perform(get("/bookings")
-                        .header(SHARER_USER_ID, 1L)
+                        .header("X-Sharer-User-Id", 1L)
                         .param("from", "-10")
                         .contentType("application/json")
                         .characterEncoding(StandardCharsets.UTF_8)
@@ -138,7 +137,7 @@ class BookingControllerTest {
         when(bookingService.addNewBooking(1L, bookingRequestDto)).thenReturn(bookingResponseDto);
 
         String result = mockMvc.perform(post("/bookings")
-                        .header(SHARER_USER_ID, 1L)
+                        .header("X-Sharer-User-Id", 1L)
                         .contentType("application/json")
                         .characterEncoding(StandardCharsets.UTF_8)
                         .content(objectMapper.writeValueAsString(bookingRequestDto)))
@@ -155,7 +154,7 @@ class BookingControllerTest {
     void add_whenInputWithoutEnd_thenReturn400() {
         bookingRequestDto.setEnd(null);
         mockMvc.perform(post("/bookings")
-                        .header(SHARER_USER_ID, 1L)
+                        .header("X-Sharer-User-Id", 1L)
                         .contentType("application/json")
                         .characterEncoding(StandardCharsets.UTF_8)
                         .content(objectMapper.writeValueAsString(bookingRequestDto)))
@@ -168,7 +167,7 @@ class BookingControllerTest {
     void add_whenInputWithoutStart_thenReturn400() {
         bookingRequestDto.setStart(null);
         mockMvc.perform(post("/bookings")
-                        .header(SHARER_USER_ID, 1L)
+                        .header("X-Sharer-User-Id", 1L)
                         .contentType("application/json")
                         .characterEncoding(StandardCharsets.UTF_8)
                         .content(objectMapper.writeValueAsString(bookingRequestDto)))
@@ -180,7 +179,7 @@ class BookingControllerTest {
     void add_whenInputWithoutItemId_thenReturn400() {
         bookingRequestDto.setItemId(null);
         mockMvc.perform(post("/bookings")
-                        .header(SHARER_USER_ID, 1L)
+                        .header("X-Sharer-User-Id", 1L)
                         .contentType("application/json")
                         .characterEncoding(StandardCharsets.UTF_8)
                         .content(objectMapper.writeValueAsString(bookingRequestDto)))
@@ -195,7 +194,7 @@ class BookingControllerTest {
         when(bookingService.approveBooking(1L, 1L, true)).thenReturn(bookingResponseDto);
 
         String result = mockMvc.perform(patch("/bookings/{bookingId}", 1L)
-                        .header(SHARER_USER_ID, 1L)
+                        .header("X-Sharer-User-Id", 1L)
                         .param("approved", "true"))
                 .andExpect(status().isOk())
                 .andReturn()
@@ -212,7 +211,7 @@ class BookingControllerTest {
         when(bookingService.approveBooking(1L, 1L, false)).thenReturn(bookingResponseDto);
 
         String result = mockMvc.perform(patch("/bookings/{bookingId}", 1L)
-                        .header(SHARER_USER_ID, 1L)
+                        .header("X-Sharer-User-Id", 1L)
                         .param("approved", "false"))
                 .andExpect(status().isOk())
                 .andReturn()

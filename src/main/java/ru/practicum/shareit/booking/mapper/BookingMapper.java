@@ -1,6 +1,7 @@
 package ru.practicum.shareit.booking.mapper;
 
 import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 import ru.practicum.shareit.booking.dto.BookingForItemDto;
 import ru.practicum.shareit.booking.dto.BookingRequestDto;
 import ru.practicum.shareit.booking.dto.BookingResponseDto;
@@ -12,10 +13,10 @@ import ru.practicum.shareit.user.model.User;
 
 import java.util.Optional;
 
-
+@Slf4j
 @UtilityClass
 public final class BookingMapper {
-    public Optional<Booking> requestDtoToEntity(BookingRequestDto dto, Item item, User booker) {
+    public static Optional<Booking> requestDtoToEntity(BookingRequestDto dto, Item item, User booker) {
         Booking booking = new Booking();
         if (dto == null) {
             return Optional.empty();
@@ -29,7 +30,7 @@ public final class BookingMapper {
         return Optional.of(booking);
     }
 
-    public Optional<BookingResponseDto> entityToResponseDto(Booking entity) {
+    public static Optional<BookingResponseDto> entityToResponseDto(Booking entity) {
         BookingResponseDto dto = new BookingResponseDto();
 
         dto.setStart(entity.getStart());
@@ -42,7 +43,7 @@ public final class BookingMapper {
         return Optional.of(dto);
     }
 
-    public Optional<BookingForItemDto> entityToBookingForItemDto(Booking booking) {
+    public static Optional<BookingForItemDto> entityToBookingForItemDto(Booking booking) {
         BookingForItemDto dto = new BookingForItemDto();
 
         dto.setStart(booking.getStart());

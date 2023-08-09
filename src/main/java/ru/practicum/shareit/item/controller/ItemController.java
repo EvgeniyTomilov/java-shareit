@@ -1,6 +1,5 @@
 package ru.practicum.shareit.item.controller;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.CommentDto;
@@ -17,9 +16,12 @@ import static ru.practicum.shareit.util.Utils.SHARER_USER_ID;
 @RestController
 @RequestMapping(path = "/items")
 @Slf4j
-@RequiredArgsConstructor
 public class ItemController {
-    private final ItemService itemService;
+    private ItemService itemService;
+
+    public ItemController(ItemService itemService) {
+        this.itemService = itemService;
+    }
 
     @PostMapping("/{itemId}/comment")
     public CommentDto addComment(@RequestHeader(SHARER_USER_ID) Long authorId,

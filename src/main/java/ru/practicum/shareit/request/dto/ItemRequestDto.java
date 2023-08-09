@@ -9,8 +9,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.practicum.shareit.util.Utils.PATTERN_DATA;
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -23,7 +21,7 @@ public class ItemRequestDto {
     @NotBlank(message = "Запрос не возможно создать без описания")
     private String description;
     private Long requesterId;
-    @JsonFormat(pattern = PATTERN_DATA)
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime created;
 
     private List<ItemDto> items = new ArrayList<>();

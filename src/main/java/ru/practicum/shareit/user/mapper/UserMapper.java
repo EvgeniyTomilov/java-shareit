@@ -1,15 +1,16 @@
 package ru.practicum.shareit.user.mapper;
 
-import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.Optional;
 
-@UtilityClass
 public final class UserMapper {
 
-    public Optional<User> makeUser(UserDto userDto) {
+    private UserMapper() {
+    }
+
+    public static Optional<User> makeUser(UserDto userDto) {
         User user = new User();
         if (userDto.getName() != null) {
             user.setName(userDto.getName());
@@ -20,7 +21,7 @@ public final class UserMapper {
         return Optional.of(user);
     }
 
-    public Optional<UserDto> makeDto(User user) {
+    public static Optional<UserDto> makeDto(User user) {
         UserDto userDto = new UserDto();
         userDto.setName(user.getName());
         userDto.setEmail(user.getEmail());
@@ -28,7 +29,7 @@ public final class UserMapper {
         return Optional.of(userDto);
     }
 
-    public Optional<User> makeUserWithId(UserDto userDto) {
+    public static Optional<User> makeUserWithId(UserDto userDto) {
         User user = new User();
         if (userDto.getName() != null) {
             user.setName(userDto.getName());

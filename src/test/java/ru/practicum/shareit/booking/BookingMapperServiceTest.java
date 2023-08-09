@@ -229,7 +229,22 @@ class BookingMapperServiceTest {
         validationException.getMessage();
     }
 
+    @Test
+    void bookingRequestPrepareForAdd_whenRequestValid_thenReturnBooking() {
+        ItemDto itemDto = ItemMapper.makeDtoFromItem(item).orElseThrow();
 
+        BookingRequestDto bookingRequestDto = BookingRequestDto.builder()
+                .itemId(ownerId1)
+                .start(start)
+                .end(end)
+                .build();
+
+        when(itemService.getItem(1L, bookerId2)).thenReturn(itemDto);
+        when(userService.getUser(bookerId2)).thenReturn(UserMapper.makeDto(userBooker).get());
+        when(userService.getUser(ownerId1)).thenReturn(UserMapper.makeDto(userOwner).get());
+
+        assertEquals(newBooking, bookingMapperService.bookingRequestPrepareForAdd(bookerId2, bookingRequestDto));
+    }
 
     @Test
     void bookingRequestPrepareForAdd_whenUserEqualsOwner_thenThrowBookingNotFoundException() {
