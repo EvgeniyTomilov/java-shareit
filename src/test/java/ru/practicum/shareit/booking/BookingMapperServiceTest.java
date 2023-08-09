@@ -6,7 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
-import ru.practicum.shareit.booking.dto.BookingMapperService;
+import ru.practicum.shareit.booking.dto.BookingMapperServiceImpl;
 import ru.practicum.shareit.booking.dto.BookingRequestDto;
 import ru.practicum.shareit.booking.dto.BookingResponseDto;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
@@ -60,7 +60,7 @@ class BookingMapperServiceTest {
     private BookingRepository bookingRepo;
 
     @InjectMocks
-    private BookingMapperService bookingMapperService;
+    private BookingMapperServiceImpl bookingMapperService;
 
     @Captor
     private ArgumentCaptor<List<BookingResponseDto>> listBookingArgumentCaptor;
