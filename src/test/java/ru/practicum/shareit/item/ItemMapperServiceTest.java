@@ -12,6 +12,7 @@ import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.StatusOfBooking;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.item.dto.CommentRequestDto;
+import ru.practicum.shareit.item.dto.ItemMapperServiceImpl;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.repository.CommentRepository;
 import ru.practicum.shareit.exception.IncorrectIdException;
@@ -52,7 +53,7 @@ class ItemMapperServiceTest {
     @Mock
     private ItemRequestRepository itemRequestRepo;
     @InjectMocks
-    private ItemMapperService itemMapperService;
+    private ItemMapperServiceImpl itemMapperService;
 
     private User userOwner;
     private User userBooker;
