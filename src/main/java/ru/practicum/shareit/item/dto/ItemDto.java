@@ -11,7 +11,6 @@ import java.util.Objects;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
 public class ItemDto {
     private Long id;
     private String name;

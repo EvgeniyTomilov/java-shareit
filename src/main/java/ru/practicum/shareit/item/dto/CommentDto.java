@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item.dto;
 
 import lombok.*;
+import ru.practicum.shareit.item.model.Item;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
@@ -21,4 +22,5 @@ public class CommentDto {
     @NotBlank(message = "Имя автора комментария должно быть указано")
     private String authorName;
     private LocalDateTime created;
+    private Item item;
 }
