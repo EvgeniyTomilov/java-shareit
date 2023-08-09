@@ -5,7 +5,6 @@ import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 
 @Getter
@@ -16,6 +15,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "items", schema = "public")
+@EqualsAndHashCode
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,18 +39,5 @@ public class Item {
     @JoinColumn(name = "request_id")
     @ToString.Exclude
     private ItemRequest request;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Item item = (Item) o;
-        return Objects.equals(owner, item.owner) && Objects.equals(name, item.name) && Objects.equals(description, item.description);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(owner, name, description);
-    }
 
 }
