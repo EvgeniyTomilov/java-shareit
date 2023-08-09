@@ -19,6 +19,7 @@ import javax.persistence.*;
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Exclude
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -33,11 +34,13 @@ public class Item {
     private String description;
 
     @Column(name = "is_available")
+    @EqualsAndHashCode.Exclude
     private Boolean isAvailable;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "request_id")
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private ItemRequest request;
 
 }

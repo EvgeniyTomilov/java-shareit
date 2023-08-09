@@ -37,6 +37,7 @@ public class ErrorHandler {
         );
     }
 
+
     @ExceptionHandler(UncheckedIOException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleInternalError(final Throwable e) {

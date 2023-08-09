@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Exclude
     private long id;
 
     @Column(name = "start_date")
@@ -39,6 +40,7 @@ public class Booking {
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
+    @EqualsAndHashCode.Exclude
     private StatusOfBooking status;
 
 
