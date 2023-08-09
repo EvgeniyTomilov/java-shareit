@@ -21,13 +21,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 class ItemControllerTest {
-    ItemController controller;
+    private ItemController controller;
     @Autowired
-    ItemService itemService;
+    private ItemService itemService;
     @Autowired
-    UserService userService;
-    UserDto userDto = new UserDto();
-    User firstUser = new User();
+    private UserService userService;
+    private UserDto userDto = new UserDto();
+    private User firstUser = new User();
 
     @BeforeEach
     public void beforeEach() {
