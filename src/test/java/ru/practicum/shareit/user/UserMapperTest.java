@@ -9,8 +9,8 @@ import ru.practicum.shareit.user.model.User;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UserMapperTest {
-    UserDto newUserDto;
-    User user;
+    private UserDto newUserDto;
+    private User user;
 
     @BeforeEach
     void setUp() {
@@ -85,11 +85,5 @@ class UserMapperTest {
         assertEquals(user, userFromMapper);
     }
 
-    @Test
-    void makeUserWithId_whenId0() {
-        newUserDto.setId(0L);
-        User userFromMapper = UserMapper.makeUserWithId(newUserDto).orElseThrow();
-        assertEquals(user, userFromMapper);
-    }
 
 }

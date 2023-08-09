@@ -55,9 +55,9 @@ public class BookingController {
 
     @GetMapping
     public List<BookingResponseDto> getBookings(@RequestHeader(SHARER_USER_ID) Long bookerId,
-                                                @RequestParam(defaultValue = "ALL") State state,
-                                                @RequestParam(required = false, defaultValue = "0") @Min(0) Integer from,
-                                                @RequestParam(required = false, defaultValue = "20") @Min(1) Integer size) {
+                                                @Valid @RequestParam(defaultValue = "ALL") State state,
+                                                @Valid @RequestParam(required = false, defaultValue = "0") @Min(0) Integer from,
+                                                @Valid @RequestParam(required = false, defaultValue = "20") @Min(1) Integer size) {
         log.info("Search user's (id {}) {} bookings - Started", bookerId, state);
         List<BookingResponseDto> bookingsOfUser = bookingService.getBookings(bookerId, state, from, size);
         log.info("{} {} bookings was found", bookingsOfUser.size(), state);

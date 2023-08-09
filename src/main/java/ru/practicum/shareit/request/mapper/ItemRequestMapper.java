@@ -1,5 +1,6 @@
 package ru.practicum.shareit.request.mapper;
 
+import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.model.ItemRequest;
@@ -8,12 +9,10 @@ import ru.practicum.shareit.user.model.User;
 import java.util.List;
 import java.util.Optional;
 
+@UtilityClass
 public final class ItemRequestMapper {
 
-    private ItemRequestMapper() {
-    }
-
-    public static Optional<ItemRequest> makeItemRequest(ItemRequestDto dto, User requester) {
+    public Optional<ItemRequest> makeItemRequest(ItemRequestDto dto, User requester) {
         ItemRequest itemRequest = new ItemRequest();
         if (dto.getId() != null) {
             itemRequest.setId(itemRequest.getId());
@@ -23,7 +22,7 @@ public final class ItemRequestMapper {
         return Optional.of(itemRequest);
     }
 
-    public static Optional<ItemRequestDto> makeItemRequestDto(ItemRequest itemRequest) {
+    public Optional<ItemRequestDto> makeItemRequestDto(ItemRequest itemRequest) {
         ItemRequestDto itemRequestDto = new ItemRequestDto();
         if (itemRequest.getId() != null) {
             itemRequestDto.setId(itemRequest.getId());
@@ -40,7 +39,7 @@ public final class ItemRequestMapper {
         return Optional.of(itemRequestDto);
     }
 
-    public static Optional<ItemRequestDto> makeItemRequestDtoWithItemsList(ItemRequest itemRequest, List<ItemDto> itemsDtoForRequest) {
+    public Optional<ItemRequestDto> makeItemRequestDtoWithItemsList(ItemRequest itemRequest, List<ItemDto> itemsDtoForRequest) {
         ItemRequestDto itemRequestDto = new ItemRequestDto();
         if (itemRequest.getId() != null) {
             itemRequestDto.setId(itemRequest.getId());

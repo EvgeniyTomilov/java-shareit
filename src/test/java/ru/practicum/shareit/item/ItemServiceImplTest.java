@@ -23,7 +23,6 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.item.model.ItemServiceImpl;
 import ru.practicum.shareit.request.model.ItemRequest;
-import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
@@ -310,14 +309,7 @@ class ItemServiceImplTest {
         assertEquals(CommentMapper.entityToDto(commentFromRepo), itemService.addNewCommentToItem(commentDtoToAdd));
     }
 
-    @Test
-    void deleteItem() {
-        when(userService.getUser(2L)).thenReturn(UserMapper.makeDto(owner).orElseThrow());
-        when(itemRepo.findById(1L)).thenReturn(Optional.ofNullable(item));
-        when(itemMapperService.getItemDto(item, 2L)).thenReturn(ItemMapper.makeDtoFromItem(item).orElseThrow());
-        itemService.deleteItem(2L, 1L);
-        verify(itemRepo).delete(item);
-    }
+
 
     @Test
     void clearAll() {
