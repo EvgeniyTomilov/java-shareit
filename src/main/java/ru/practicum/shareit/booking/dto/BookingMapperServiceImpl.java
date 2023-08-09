@@ -11,7 +11,6 @@ import ru.practicum.shareit.booking.model.StatusOfBooking;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.exception.BookingNotFoundException;
 import ru.practicum.shareit.exception.ItemNotFoundException;
-import ru.practicum.shareit.exception.ObjectNotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.mapper.ItemMapper;
@@ -38,7 +37,7 @@ public class BookingMapperServiceImpl implements BookingMapperService {
     @Override
     public Booking addStatusToBooking(Long ownerId, Long bookingId, Boolean approved) {
         Booking bookingFromRepo = bookingRepo.findById(bookingId)
-                .orElseThrow(() -> new ObjectNotFoundException("Объект не найден"));
+                .orElseThrow(() -> new NullPointerException("Объект не найден"));
 
         if (!bookingFromRepo.getStatus().equals(StatusOfBooking.WAITING)) {
             log.info("Статус бронирования уже был установлен");
