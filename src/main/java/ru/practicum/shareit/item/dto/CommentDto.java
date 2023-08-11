@@ -22,5 +22,4 @@ public class CommentDto {
     @NotBlank(message = "Имя автора комментария должно быть указано")
     private String authorName;
     private LocalDateTime created;
-    private Item item;
-}
+    }

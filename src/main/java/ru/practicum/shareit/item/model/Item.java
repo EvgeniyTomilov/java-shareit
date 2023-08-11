@@ -37,7 +37,7 @@ public class Item {
     @EqualsAndHashCode.Exclude
     private Boolean isAvailable;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "request_id")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
