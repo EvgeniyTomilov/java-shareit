@@ -1,11 +1,12 @@
 package ru.practicum.shareit.item.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.comment.dto.CommentDto;
-import ru.practicum.shareit.comment.dto.CommentRequestDto;
+import ru.practicum.shareit.item.dto.CommentDto;
+import ru.practicum.shareit.item.dto.CommentRequestDto;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.service.ItemService;
+import ru.practicum.shareit.item.model.ItemService;
 
 import javax.validation.Valid;
 import java.util.Collection;
@@ -16,12 +17,10 @@ import static ru.practicum.shareit.util.Utils.SHARER_USER_ID;
 @RestController
 @RequestMapping(path = "/items")
 @Slf4j
+@RequiredArgsConstructor
 public class ItemController {
-    private ItemService itemService;
+    private final ItemService itemService;
 
-    public ItemController(ItemService itemService) {
-        this.itemService = itemService;
-    }
 
     @PostMapping("/{itemId}/comment")
     public CommentDto addComment(@RequestHeader(SHARER_USER_ID) Long authorId,
@@ -33,14 +32,13 @@ public class ItemController {
         requestDto.setItemId(itemId);
 
         CommentDto commentDto = itemService.addNewCommentToItem(requestDto);
-        log.info("Comment {} added to item id: {} - Finished", commentDto.getText(), itemId);
+        log.info("Comment added to item id: {} - Finished", itemId);
         return commentDto;
     }
 
-
     @PostMapping
-    public ItemDto addItem(@RequestHeader(SHARER_USER_ID) Long ownerId,
-                           @RequestBody ItemDto itemDto) {
+    public ItemDto add(@RequestHeader(SHARER_USER_ID) Long ownerId,
+                       @RequestBody ItemDto itemDto) {
         log.info("add: {} - Started", itemDto);
         ItemDto itemDtoFromRepo = itemService.addNewItem(ownerId, itemDto);
         log.info("create: {} - Finished", itemDtoFromRepo);
@@ -48,9 +46,9 @@ public class ItemController {
     }
 
     @PatchMapping("/{itemId}")
-    public ItemDto updateItem(@RequestHeader(SHARER_USER_ID) Long userId,
-                              @PathVariable Long itemId,
-                              @RequestBody ItemDto itemDto) {
+    public ItemDto update(@RequestHeader(SHARER_USER_ID) Long userId,
+                          @PathVariable Long itemId,
+                          @RequestBody ItemDto itemDto) {
         log.info("Update {} for item id: {} by user id {}  - Started", itemDto, itemId, userId);
         ItemDto itemDtoFromRepo = itemService.updateItem(userId, itemId, itemDto);
         log.info("update: {} - Finished", itemDtoFromRepo);
@@ -86,8 +84,8 @@ public class ItemController {
     public void deleteItem(@RequestHeader(SHARER_USER_ID) Long userId,
                            @PathVariable Long itemId) {
         log.info("Delete item id {} user id {} - Started", itemId, userId);
-        boolean isDel = itemService.deleteItem(userId, itemId);
-        log.info("item id {} was deleted - {} ", itemId, isDel);
+        itemService.deleteItem(userId, itemId);
+        log.info("item id {} was deleted - {} ", itemId);
     }
 
     @DeleteMapping

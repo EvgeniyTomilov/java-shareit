@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
-    private UserRepository userRepo;
+    private final UserRepository userRepo;
 
     @Override
     public UserDto addUser(UserDto userDto) {
@@ -37,25 +37,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> getUsers() {
         return userRepo.findAll().stream()
-                .map(user -> UserMapper.makeDto(user)
-                        .orElseThrow(() -> new NullPointerException("dto объект не найден")))
+                .map(user -> UserMapper.makeDto(user).get())
                 .collect(Collectors.toList());
     }
 
     @Override
     public UserDto updateUser(UserDto userDto, long id) {
-        UserDto userStorage = getUser(id);
-        if (userDto.getName() != null) {
-            userStorage.setName(userDto.getName());
-        }
-        if (userDto.getEmail() != null) {
-            userStorage.setEmail(userDto.getEmail());
-        }
-        User user = UserMapper.makeUserWithId(userStorage)
-                .orElseThrow(() -> new NullPointerException("объект не найден"));
-
-        return UserMapper.makeDto(userRepo.save(user))
-                .orElseThrow(() -> new NullPointerException("dto объект не найден"));
+        User user = prepareForUpdate(userDto, id);
+        return UserMapper.makeDto(userRepo.save(user)).get();
     }
 
     @Override
@@ -68,5 +57,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public void clearAll() {
         userRepo.deleteAll();
+    }
+
+    private User prepareForUpdate(UserDto userDto, long id) {
+        UserDto userStorage = getUser(id);
+        if (userDto.getName() != null) {
+            userStorage.setName(userDto.getName());
+        }
+        if (userDto.getEmail() != null) {
+            userStorage.setEmail(userDto.getEmail());
+        }
+
+        return UserMapper.makeUserWithId(userStorage).get();
     }
 }
