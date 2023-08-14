@@ -3,15 +3,10 @@ package ru.practicum.shareit.item.model;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.practicum.shariet.item.dto.CommentDto;
-import ru.practicum.shareit.item.dto.CommentRequestDto;
-import ru.practicum.shareit.item.dto.CommentMapper;
+import ru.practicum.shareit.exception.IncorrectIdException;
+import ru.practicum.shareit.exception.ItemNotFoundException;
+import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.item.repository.CommentRepository;
-import ru.practicum.shariet.exception.IncorrectIdException;
-import ru.practicum.shariet.exception.ItemNotFoundException;
-import ru.practicum.shariet.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemMapperService;
-import ru.practicum.shareit.item.dto.ItemMapper;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.dto.UserMapper;
 import ru.practicum.shareit.user.model.User;
@@ -25,10 +20,10 @@ import java.util.stream.Collectors;
 @Service("itemService")
 @Slf4j
 public class ItemServiceImpl implements ItemService {
-    private final ItemRepository itemRepo;
-    private final UserService userService;
-    private final CommentRepository commentRepo;
-    private final ItemMapperService itemMapperService;
+    private ItemRepository itemRepo;
+    private UserService userService;
+    private CommentRepository commentRepo;
+    private ItemMapperService itemMapperService;
 
     @Override
     public ItemDto addNewItem(Long ownerId, ItemDto itemDto) {

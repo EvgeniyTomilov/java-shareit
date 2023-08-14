@@ -1,7 +1,8 @@
 package ru.practicum.shareit.booking.dto;
 
 import ru.practicum.shareit.booking.model.Booking;
-import ru.practicum.shariet.booking.dto.BookingState;
+import ru.practicum.shareit.booking.model.StateForBooking;
+
 
 import java.util.List;
 
@@ -12,8 +13,9 @@ public interface BookingMapperService {
 
     void accessVerification(Booking bookingFromRepo, Long userId);
 
-    List<BookingResponseDto> prepareResponseDtoList(Long bookerId, BookingState state, Integer from, Integer size);
+    List<BookingResponseDto> prepareResponseDtoList(Long bookerId, StateForBooking state,
+                                                    Integer from, Integer size);
 
-    List<BookingResponseDto> prepareResponseDtoListForOwner(Long ownerId, BookingState state, Integer from, Integer size);
+    List<BookingResponseDto> prepareResponseDtoListForOwner(Long ownerId, StateForBooking state, Integer from, Integer size);
 
 }

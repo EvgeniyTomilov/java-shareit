@@ -3,12 +3,11 @@ package ru.practicum.shareit.request.dto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import ru.practicum.shariet.exception.IncorrectIdException;
-import ru.practicum.shariet.item.dto.ItemDto;
+import ru.practicum.shareit.exception.IncorrectIdException;
+import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
-import ru.practicum.shariet.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.dto.UserMapper;
 import ru.practicum.shareit.user.model.User;
@@ -21,23 +20,28 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Component
 public class ItemRequestMapperServiceImpl implements ItemRequestMapperService {
-    private final UserService userService;
-    private final ItemRepository itemRepo;
+    private UserService userService;
+    private ItemRepository itemRepo;
 
-    @Override
+
     public ItemRequest prepareForSaveItemRequest(Long requesterId, ItemRequestDto dto) {
         User requester = UserMapper.makeUserWithId(userService.getUser(requesterId)).get();
         return ItemRequestMapper.makeItemRequest(dto, requester).get();
     }
 
-    @Override
     public boolean requesterValidate(Long requesterId) {
         validateId(requesterId);
         userService.getUser(requesterId);
         return true;
     }
 
-    @Override
+    private void validateId(Long id) {
+        if (id < 1) {
+            log.warn("id {} incorrect", id);
+            throw new IncorrectIdException("id can't be less then 1");
+        }
+    }
+
     public ItemRequestDto prepareForReturnDto(ItemRequest itemRequest) {
         List<Item> itemsForRequest = itemRepo.findAllByRequestId(itemRequest.getId());
         List<ItemDto> itemsDtoForRequest = itemsForRequest.stream()
@@ -56,17 +60,9 @@ public class ItemRequestMapperServiceImpl implements ItemRequestMapperService {
         return itemRequestDto;
     }
 
-    @Override
     public List<ItemRequestDto> prepareForReturnListDto(List<ItemRequest> itemRequests) {
         return itemRequests.stream()
                 .map(itemRequest -> prepareForReturnDto(itemRequest))
                 .collect(Collectors.toList());
-    }
-
-    private void validateId(Long id) {
-        if (id < 1) {
-            log.warn("id {} incorrect", id);
-            throw new IncorrectIdException("id can't be less then 1");
-        }
     }
 }

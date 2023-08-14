@@ -1,8 +1,7 @@
 package ru.practicum.shareit.booking.mapper;
 
 import lombok.experimental.UtilityClass;
-import lombok.extern.slf4j.Slf4j;
-import ru.practicum.shariet.item.dto.BookingForItemDto;
+import ru.practicum.shareit.booking.dto.BookingForItemDto;
 import ru.practicum.shareit.booking.dto.BookingRequestDto;
 import ru.practicum.shareit.booking.dto.BookingResponseDto;
 import ru.practicum.shareit.booking.model.Booking;
@@ -13,20 +12,16 @@ import ru.practicum.shareit.user.model.User;
 
 import java.util.Optional;
 
-@Slf4j
 @UtilityClass
 public final class BookingMapper {
+
     public Optional<Booking> requestDtoToEntity(BookingRequestDto dto, Item item, User booker) {
         Booking booking = new Booking();
-        if (dto == null) {
-            return Optional.empty();
-        } else {
-            booking.setStart(dto.getStart());
-            booking.setEnd(dto.getEnd());
-            booking.setItem(item);
-            booking.setStatus(dto.getStatus());
-            booking.setBooker(booker);
-        }
+        booking.setStart(dto.getStart());
+        booking.setEnd(dto.getEnd());
+        booking.setItem(item);
+        booking.setStatus(dto.getStatus());
+        booking.setBooker(booker);
         return Optional.of(booking);
     }
 
@@ -43,7 +38,7 @@ public final class BookingMapper {
         return Optional.of(dto);
     }
 
-    public Optional<BookingForItemDto> entityToBookingForItemDto(Booking booking) {
+    public static Optional<BookingForItemDto> entityToBookingForItemDto(Booking booking) {
         BookingForItemDto dto = new BookingForItemDto();
 
         dto.setStart(booking.getStart());
@@ -52,6 +47,7 @@ public final class BookingMapper {
         dto.setStatus(booking.getStatus());
         dto.setId(booking.getId());
         dto.setBookerId(booking.getBooker().getId());
+
         return Optional.of(dto);
     }
 }

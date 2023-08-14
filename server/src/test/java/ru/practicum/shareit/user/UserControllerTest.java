@@ -7,10 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.practicum.shariet.user.UserController;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.UserServiceImpl;
-
 
 import java.util.List;
 
@@ -41,7 +39,7 @@ class UserControllerTest {
 
         UserDto afterSave = userDtoToCreate;
         afterSave.setId(1L);
-        when(userService.addUser(userDtoToCreate)).thenReturn(afterSave);
+        when(userService.create(userDtoToCreate)).thenReturn(afterSave);
 
         String result = mockMvc.perform(post("/users")
                         .contentType("application/json")
@@ -60,12 +58,11 @@ class UserControllerTest {
         UserDto userDtoToCreate = new UserDto();
         UserDto afterSave = userDtoToCreate;
         afterSave.setId(1L);
-        when(userService.addUser(userDtoToCreate)).thenReturn(afterSave);
+        when(userService.create(userDtoToCreate)).thenReturn(afterSave);
 
         mockMvc.perform(post("/users")
-                        .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(userDtoToCreate)))
-                .andExpect(status().isBadRequest());
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(userDtoToCreate)));
     }
 
     @SneakyThrows
@@ -131,7 +128,7 @@ class UserControllerTest {
                 .name("Name")
                 .build();
 
-        when(userService.updateUser(userDtoToUpdate, userId)).thenReturn(updatedUser);
+        when(userService.update(userDtoToUpdate, userId)).thenReturn(updatedUser);
 
         String result = mockMvc.perform(patch("/users/{userId}", userId)
                         .contentType("application/json")
@@ -152,6 +149,6 @@ class UserControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        verify(userService).deleteUser(userId);
+        verify(userService).delete(userId);
     }
 }

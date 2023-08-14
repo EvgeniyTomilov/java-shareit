@@ -7,7 +7,7 @@ import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.json.JsonContent;
 import ru.practicum.shareit.booking.dto.BookingResponseDto;
-import ru.practicum.shariet.booking.dto.StatusOfBooking;
+import ru.practicum.shareit.booking.model.StatusOfBooking;
 
 import java.time.LocalDateTime;
 

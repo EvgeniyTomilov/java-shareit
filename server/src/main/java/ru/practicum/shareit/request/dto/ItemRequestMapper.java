@@ -1,7 +1,6 @@
 package ru.practicum.shareit.request.dto;
 
-import ru.practicum.shariet.item.dto.ItemDto;
-import ru.practicum.shariet.request.dto.ItemRequestDto;
+import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
 

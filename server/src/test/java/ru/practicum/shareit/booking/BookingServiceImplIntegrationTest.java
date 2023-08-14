@@ -10,9 +10,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import ru.practicum.shareit.booking.dto.BookingRequestDto;
 import ru.practicum.shareit.booking.dto.BookingResponseDto;
-import ru.practicum.shariet.booking.dto.BookingState;
-import ru.practicum.shariet.booking.dto.StatusOfBooking;
 import ru.practicum.shareit.booking.model.BookingService;
+import ru.practicum.shareit.booking.model.StateForBooking;
+import ru.practicum.shareit.booking.model.StatusOfBooking;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.model.User;
@@ -21,7 +21,7 @@ import ru.practicum.shareit.user.repository.UserRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureTestDatabase
@@ -124,7 +124,7 @@ class BookingServiceImplIntegrationTest {
         BookingResponseDto bookingResponseDto2 = bookingService.addNewBooking(userBooker.getId(), bookingRequestDto2);
         List<BookingResponseDto> expected = List.of(bookingResponseDto2, bookingResponseDto1);
 
-        List<BookingResponseDto> actual = bookingService.getBookings(userBooker.getId(), BookingState.WAITING, 0, 2);
+        List<BookingResponseDto> actual = bookingService.getBookings(userBooker.getId(), StateForBooking.WAITING, 0, 2);
 
         assertThat(actual).usingRecursiveComparison().ignoringFields("start", "end").isEqualTo(expected);
     }
@@ -148,7 +148,7 @@ class BookingServiceImplIntegrationTest {
         BookingResponseDto bookingResponseDto2 = bookingService.addNewBooking(userBooker.getId(), bookingRequestDto2);
         List<BookingResponseDto> expected = List.of(bookingResponseDto2, bookingResponseDto1);
 
-        List<BookingResponseDto> actual = bookingService.getBookingsForOwner(userOwner.getId(), BookingState.WAITING, 0, 2);
+        List<BookingResponseDto> actual = bookingService.getBookingsForOwner(userOwner.getId(), StateForBooking.WAITING, 0, 2);
 
         assertThat(actual).usingRecursiveComparison().ignoringFields("start", "end").isEqualTo(expected);
     }

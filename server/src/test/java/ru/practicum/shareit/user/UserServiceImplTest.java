@@ -9,13 +9,13 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.practicum.shariet.exception.UserNotFoundException;
-import ru.practicum.shariet.exception.ValidationException;
+import ru.practicum.shareit.exception.UserNotFoundException;
+import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.dto.UserMapper;
 import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.user.model.UserServiceImpl;
+import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -61,7 +61,7 @@ class UserServiceImplTest {
         User newUser = UserMapper.makeUser(newUserDto).orElseThrow();
         when(userRepo.save(newUser)).thenReturn(userFromRepo);
         UserDto expectedDto = UserMapper.makeDto(userFromRepo).orElseThrow();
-        assertEquals(expectedDto, userService.addUser(newUserDto));
+        assertEquals(expectedDto, userService.create(newUserDto));
     }
 
     @Test
@@ -71,7 +71,7 @@ class UserServiceImplTest {
                 .name("New User")
                 .build();
         when(userRepo.save(UserMapper.makeUser(withIncorrectEmail).orElseThrow())).thenThrow(ValidationException.class);
-        assertThrows(ValidationException.class, () -> userService.addUser(withIncorrectEmail));
+        assertThrows(ValidationException.class, () -> userService.create(withIncorrectEmail));
     }
 
     @Test
@@ -81,7 +81,7 @@ class UserServiceImplTest {
                 .name("")
                 .build();
         when(userRepo.save(UserMapper.makeUser(withIncorrectEmail).orElseThrow())).thenThrow(ValidationException.class);
-        assertThrows(ValidationException.class, () -> userService.addUser(withIncorrectEmail));
+        assertThrows(ValidationException.class, () -> userService.create(withIncorrectEmail));
 
     }
 
@@ -134,7 +134,7 @@ class UserServiceImplTest {
 
         when(userRepo.findById(1L)).thenReturn(Optional.ofNullable(userFromRepo));
         when(userRepo.save(userUpdate)).thenReturn(userUpdate);
-        assertEquals(dtoUpdate, userService.updateUser(dtoUpdate, 1L));
+        assertEquals(dtoUpdate, userService.update(dtoUpdate, 1L));
 
         verify(userRepo).save(userArgumentCaptor.capture());
         User savedUser = userArgumentCaptor.getValue();
@@ -163,13 +163,13 @@ class UserServiceImplTest {
 
         when(userRepo.findById(1L)).thenReturn(Optional.ofNullable(userFromRepo));
         when(userRepo.save(userUpdate)).thenReturn(userUpdate);
-        assertEquals(dtoUpdate, userService.updateUser(dtoUpdate, 1L));
+        assertEquals(dtoUpdate, userService.update(dtoUpdate, 1L));
     }
 
     @Test
     void delete() {
         when(userRepo.findById(1L)).thenReturn(Optional.ofNullable(userFromRepo));
-        userService.deleteUser(1L);
+        userService.delete(1L);
         verify(userRepo).deleteById(1L);
     }
 

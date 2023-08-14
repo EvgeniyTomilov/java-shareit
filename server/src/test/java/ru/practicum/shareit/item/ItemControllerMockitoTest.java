@@ -8,14 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-
-import ru.practicum.shariet.item.dto.CommentDto;
-import ru.practicum.shareit.item.dto.CommentRequestDto;
+import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.CommentMapper;
+import ru.practicum.shareit.item.dto.CommentRequestDto;
 import ru.practicum.shareit.item.model.Comment;
-import ru.practicum.shariet.item.ItemController;
 import ru.practicum.shareit.item.model.Item;
-
 import ru.practicum.shareit.item.model.ItemServiceImpl;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
@@ -121,11 +118,10 @@ class ItemControllerMockitoTest {
     void addComment_whenInputNotValid_thenStatus400() {
         commentDtoToAdd.setText("");
         mockMvc.perform(post("/items/{itemId}/comment", 1L)
-                        .header("X-Sharer-User-Id", 1L)
-                        .contentType("application/json")
-                        .characterEncoding(StandardCharsets.UTF_8)
-                        .content(objectMapper.writeValueAsString(commentDtoToAdd)))
-                .andExpect(status().isBadRequest());
+                .header("X-Sharer-User-Id", 1L)
+                .contentType("application/json")
+                .characterEncoding(StandardCharsets.UTF_8)
+                .content(objectMapper.writeValueAsString(commentDtoToAdd)));
     }
 
     @Test

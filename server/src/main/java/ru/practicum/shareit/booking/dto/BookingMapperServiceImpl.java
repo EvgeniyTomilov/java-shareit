@@ -29,11 +29,12 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 @AllArgsConstructor
-public class BookingMapperService {
+public class BookingMapperServiceImpl implements BookingMapperService {
     private ItemService itemService;
     private UserService userService;
     private BookingRepository bookingRepo;
 
+    @Override
     public Booking addStatusToBooking(Long ownerId, Long bookingId, Boolean approved) {
         Booking bookingFromRepo = bookingRepo.findById(bookingId)
                 .orElseThrow(() -> new NullPointerException("Объект не найден"));
@@ -52,6 +53,7 @@ public class BookingMapperService {
         return bookingFromRepo;
     }
 
+    @Override
     public Booking bookingRequestPrepareForAdd(Long bookerId, BookingRequestDto dto) {
         ItemDto itemDtoFromRepo = itemService.getItem(dto.getItemId(), bookerId);
 
@@ -77,17 +79,7 @@ public class BookingMapperService {
         return BookingMapper.requestDtoToEntity(dto, item, user).get();
     }
 
-    private void dateValidate(BookingRequestDto dto) {
-        if (dto.getStart().isBefore(LocalDateTime.now())) {
-            log.warn("Время начала бронирования не может быть в прошлом");
-            throw new ValidationException("StartTime can't be from the past");
-        }
-        if (dto.getEnd().isBefore(dto.getStart()) || dto.getEnd().equals(dto.getStart())) {
-            log.warn("Окончание бронирования должно быть позже начала бронирования");
-            throw new ValidationException("EndTime can be later then StartDate");
-        }
-    }
-
+    @Override
     public void accessVerification(Booking bookingFromRepo, Long userId) {
         if (!(bookingFromRepo.getBooker().getId().equals(userId)
                 || bookingFromRepo.getItem().getOwner().getId().equals(userId))) {
@@ -96,6 +88,7 @@ public class BookingMapperService {
         }
     }
 
+    @Override
     public List<BookingResponseDto> prepareResponseDtoList(Long bookerId, StateForBooking state,
                                                            Integer from, Integer size) {
         userService.getUser(bookerId);
@@ -137,6 +130,7 @@ public class BookingMapperService {
                 .collect(Collectors.toList());
     }
 
+    @Override
     public List<BookingResponseDto> prepareResponseDtoListForOwner(Long ownerId, StateForBooking state, Integer from, Integer size) {
         userService.getUser(ownerId);
         List<Booking> answerPage;
@@ -182,5 +176,16 @@ public class BookingMapperService {
                         .map(booking -> BookingMapper.entityToResponseDto(booking)
                                 .orElseThrow(() -> new BookingNotFoundException("dto объект не найден")))
                         .collect(Collectors.toList()) : Collections.emptyList();
+    }
+
+    private void dateValidate(BookingRequestDto dto) {
+        if (dto.getStart().isBefore(LocalDateTime.now())) {
+            log.warn("Время начала бронирования не может быть в прошлом");
+            throw new ValidationException("StartTime can't be from the past");
+        }
+        if (dto.getEnd().isBefore(dto.getStart()) || dto.getEnd().equals(dto.getStart())) {
+            log.warn("Окончание бронирования должно быть позже начала бронирования");
+            throw new ValidationException("EndTime can be later then StartDate");
+        }
     }
 }

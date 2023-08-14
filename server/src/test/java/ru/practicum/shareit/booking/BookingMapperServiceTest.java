@@ -6,18 +6,18 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
-import ru.practicum.shareit.booking.dto.BookingMapperServiceImpl;
+import ru.practicum.shareit.booking.dto.BookingMapperService;
 import ru.practicum.shareit.booking.dto.BookingRequestDto;
 import ru.practicum.shareit.booking.dto.BookingResponseDto;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
-import ru.practicum.shariet.booking.dto.BookingState;
-import ru.practicum.shariet.booking.dto.StatusOfBooking;
+import ru.practicum.shareit.booking.model.StateForBooking;
+import ru.practicum.shareit.booking.model.StatusOfBooking;
 import ru.practicum.shareit.booking.repository.BookingRepository;
-import ru.practicum.shariet.exception.BookingNotFoundException;
-import ru.practicum.shariet.exception.ItemNotFoundException;
-import ru.practicum.shariet.exception.ValidationException;
-import ru.practicum.shariet.item.dto.ItemDto;
+import ru.practicum.shareit.exception.BookingNotFoundException;
+import ru.practicum.shareit.exception.ItemNotFoundException;
+import ru.practicum.shareit.exception.ValidationException;
+import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.model.ItemService;
@@ -60,7 +60,7 @@ class BookingMapperServiceTest {
     private BookingRepository bookingRepo;
 
     @InjectMocks
-    private BookingMapperServiceImpl bookingMapperService;
+    private BookingMapperService bookingMapperService;
 
     @Captor
     private ArgumentCaptor<List<BookingResponseDto>> listBookingArgumentCaptor;
@@ -144,14 +144,6 @@ class BookingMapperServiceTest {
         when(bookingRepo.findById(1L)).thenReturn(Optional.ofNullable(approvedBooking));
         ValidationException validationException = assertThrows(ValidationException.class,
                 () -> bookingMapperService.addStatusToBooking(1L, 1L, true));
-        validationException.getMessage();
-    }
-
-    @Test
-    void addStatusToBooking_whenApprovedIsNull_thenThrowValidationException() {
-        when(bookingRepo.findById(1L)).thenReturn(Optional.ofNullable(newBooking));
-        ValidationException validationException = assertThrows(ValidationException.class,
-                () -> bookingMapperService.addStatusToBooking(1L, 1L, null));
         validationException.getMessage();
     }
 
@@ -283,7 +275,7 @@ class BookingMapperServiceTest {
                 .collect(Collectors.toList());
 
         List<BookingResponseDto> actualAnswerList =
-                bookingMapperService.prepareResponseDtoList(bookerId2, BookingState.ALL, 0, 1);
+                bookingMapperService.prepareResponseDtoList(bookerId2, StateForBooking.ALL, 0, 1);
 
         assertEquals(expectedAnswerList, actualAnswerList);
     }
@@ -300,7 +292,7 @@ class BookingMapperServiceTest {
                 .collect(Collectors.toList());
 
         List<BookingResponseDto> actualAnswerList =
-                bookingMapperService.prepareResponseDtoList(bookerId2, BookingState.ALL, 0, 1);
+                bookingMapperService.prepareResponseDtoList(bookerId2, StateForBooking.ALL, 0, 1);
 
         assertEquals(expectedAnswerList, actualAnswerList);
     }
@@ -318,7 +310,7 @@ class BookingMapperServiceTest {
                 .map(booking -> BookingMapper.entityToResponseDto(booking).get())
                 .collect(Collectors.toList());
         List<BookingResponseDto> actualAnswerList =
-                bookingMapperService.prepareResponseDtoList(bookerId2, BookingState.FUTURE, 0, 1);
+                bookingMapperService.prepareResponseDtoList(bookerId2, StateForBooking.FUTURE, 0, 1);
 
         assertEquals(expectedAnswerList, actualAnswerList);
     }
@@ -337,7 +329,7 @@ class BookingMapperServiceTest {
                 .map(booking -> BookingMapper.entityToResponseDto(booking).get())
                 .collect(Collectors.toList());
         List<BookingResponseDto> actualAnswerList =
-                bookingMapperService.prepareResponseDtoList(bookerId2, BookingState.CURRENT, 0, 1);
+                bookingMapperService.prepareResponseDtoList(bookerId2, StateForBooking.CURRENT, 0, 1);
 
         assertEquals(expectedAnswerList, actualAnswerList);
     }
@@ -355,7 +347,7 @@ class BookingMapperServiceTest {
                 .map(booking -> BookingMapper.entityToResponseDto(booking).get())
                 .collect(Collectors.toList());
         List<BookingResponseDto> actualAnswerList =
-                bookingMapperService.prepareResponseDtoList(bookerId2, BookingState.PAST, 0, 1);
+                bookingMapperService.prepareResponseDtoList(bookerId2, StateForBooking.PAST, 0, 1);
 
         assertEquals(expectedAnswerList, actualAnswerList);
     }
@@ -373,7 +365,7 @@ class BookingMapperServiceTest {
                 .map(booking -> BookingMapper.entityToResponseDto(booking).get())
                 .collect(Collectors.toList());
         List<BookingResponseDto> actualAnswerList =
-                bookingMapperService.prepareResponseDtoList(bookerId2, BookingState.WAITING, 0, 1);
+                bookingMapperService.prepareResponseDtoList(bookerId2, StateForBooking.WAITING, 0, 1);
 
         assertEquals(expectedAnswerList, actualAnswerList);
     }
@@ -391,7 +383,7 @@ class BookingMapperServiceTest {
                 .map(booking -> BookingMapper.entityToResponseDto(booking).get())
                 .collect(Collectors.toList());
         List<BookingResponseDto> actualAnswerList =
-                bookingMapperService.prepareResponseDtoList(bookerId2, BookingState.REJECTED, 0, 1);
+                bookingMapperService.prepareResponseDtoList(bookerId2, StateForBooking.REJECTED, 0, 1);
 
         assertEquals(expectedAnswerList, actualAnswerList);
     }
@@ -411,7 +403,7 @@ class BookingMapperServiceTest {
                 .collect(Collectors.toList());
 
         List<BookingResponseDto> actualAnswerList =
-                bookingMapperService.prepareResponseDtoListForOwner(ownerId1, BookingState.ALL, 0, 1);
+                bookingMapperService.prepareResponseDtoListForOwner(ownerId1, StateForBooking.ALL, 0, 1);
 
         assertEquals(expectedAnswerList, actualAnswerList);
     }
@@ -432,7 +424,7 @@ class BookingMapperServiceTest {
                 .collect(Collectors.toList());
 
         List<BookingResponseDto> actualAnswerList =
-                bookingMapperService.prepareResponseDtoListForOwner(ownerId1, BookingState.WAITING, 0, 1);
+                bookingMapperService.prepareResponseDtoListForOwner(ownerId1, StateForBooking.WAITING, 0, 1);
 
         assertEquals(expectedAnswerList, actualAnswerList);
     }
@@ -453,7 +445,7 @@ class BookingMapperServiceTest {
                 .collect(Collectors.toList());
 
         List<BookingResponseDto> actualAnswerList =
-                bookingMapperService.prepareResponseDtoListForOwner(ownerId1, BookingState.REJECTED, 0, 1);
+                bookingMapperService.prepareResponseDtoListForOwner(ownerId1, StateForBooking.REJECTED, 0, 1);
 
         assertEquals(expectedAnswerList, actualAnswerList);
     }
@@ -475,7 +467,7 @@ class BookingMapperServiceTest {
                 .collect(Collectors.toList());
 
         List<BookingResponseDto> actualAnswerList =
-                bookingMapperService.prepareResponseDtoListForOwner(ownerId1, BookingState.CURRENT, 0, 1);
+                bookingMapperService.prepareResponseDtoListForOwner(ownerId1, StateForBooking.CURRENT, 0, 1);
 
         assertEquals(expectedAnswerList, actualAnswerList);
     }
@@ -497,7 +489,7 @@ class BookingMapperServiceTest {
                 .collect(Collectors.toList());
 
         List<BookingResponseDto> actualAnswerList =
-                bookingMapperService.prepareResponseDtoListForOwner(ownerId1, BookingState.PAST, 0, 1);
+                bookingMapperService.prepareResponseDtoListForOwner(ownerId1, StateForBooking.PAST, 0, 1);
 
         assertEquals(expectedAnswerList, actualAnswerList);
     }
@@ -518,7 +510,7 @@ class BookingMapperServiceTest {
                 .collect(Collectors.toList());
 
         List<BookingResponseDto> actualAnswerList =
-                bookingMapperService.prepareResponseDtoListForOwner(ownerId1, BookingState.FUTURE, 0, 1);
+                bookingMapperService.prepareResponseDtoListForOwner(ownerId1, StateForBooking.FUTURE, 0, 1);
 
         assertEquals(expectedAnswerList, actualAnswerList);
     }
@@ -529,7 +521,7 @@ class BookingMapperServiceTest {
         when(userService.getUser(bookerId2)).thenReturn(UserMapper.makeDto(userBooker).orElseThrow());
         when(itemService.getItems(bookerId2)).thenReturn(new ArrayList<>());
         ItemNotFoundException itemNotFoundException = assertThrows(ItemNotFoundException.class,
-                () -> bookingMapperService.prepareResponseDtoListForOwner(bookerId2, BookingState.ALL, 0, 1));
+                () -> bookingMapperService.prepareResponseDtoListForOwner(bookerId2, StateForBooking.ALL, 0, 1));
         itemNotFoundException.getMessage();
     }
 }

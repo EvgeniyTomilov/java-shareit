@@ -10,12 +10,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.practicum.shariet.exception.ItemRequestNotFoundException;
-import ru.practicum.shariet.exception.UserNotFoundException;
-import ru.practicum.shariet.request.ItemRequestController;
-import ru.practicum.shariet.request.dto.ItemRequestDto;
-import ru.practicum.shareit.request.repository.ItemRequestRepository;
+import ru.practicum.shareit.exception.ItemRequestNotFoundException;
+import ru.practicum.shareit.exception.UserNotFoundException;
+import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.model.ItemRequestServiceImpl;
+import ru.practicum.shareit.request.repository.ItemRequestRepository;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;

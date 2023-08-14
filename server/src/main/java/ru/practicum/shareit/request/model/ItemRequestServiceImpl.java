@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import ru.practicum.shariet.exception.ItemRequestNotFoundException;
-import ru.practicum.shariet.request.dto.ItemRequestDto;
+import ru.practicum.shareit.exception.ItemRequestNotFoundException;
+import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestMapperService;
 import ru.practicum.shareit.request.repository.ItemRequestRepository;
 
@@ -15,8 +15,8 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Service
 public class ItemRequestServiceImpl implements ItemRequestService {
-    private final ItemRequestMapperService itemRequestMapperService;
-    private final ItemRequestRepository itemRequestRepo;
+    private ItemRequestMapperService itemRequestMapperService;
+    private ItemRequestRepository itemRequestRepo;
 
     @Override
     public ItemRequestDto addNewItemRequest(Long requesterId, ItemRequestDto dto) {

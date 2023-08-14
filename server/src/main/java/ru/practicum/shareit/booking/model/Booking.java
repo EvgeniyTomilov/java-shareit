@@ -3,10 +3,10 @@ package ru.practicum.shareit.booking.model;
 import lombok.*;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
-import ru.practicum.shariet.booking.dto.StatusOfBooking;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Builder
 @Entity
@@ -16,11 +16,9 @@ import java.time.LocalDateTime;
 @Table(name = "bookings", schema = "public")
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
 public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Exclude
     private long id;
 
     @Column(name = "start_date")
@@ -29,20 +27,30 @@ public class Booking {
     @Column(name = "end_date")
     private LocalDateTime end;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
     @ToString.Exclude
     private Item item;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "booker_id")
     @ToString.Exclude
     private User booker;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
-    @EqualsAndHashCode.Exclude
     private StatusOfBooking status;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Booking booking = (Booking) o;
+        return Objects.equals(start, booking.start) && Objects.equals(end, booking.end) && Objects.equals(item, booking.item) && Objects.equals(booker, booking.booker);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(start, end, item, booker);
+    }
 }

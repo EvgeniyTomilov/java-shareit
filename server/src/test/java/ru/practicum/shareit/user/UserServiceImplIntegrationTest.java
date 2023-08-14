@@ -36,7 +36,7 @@ class UserServiceImplIntegrationTest {
 
     @Test
     void whenAddUser() {
-        UserDto expected = userService.addUser(userDto);
+        UserDto expected = userService.create(userDto);
 
         UserDto actual = userService.getUser(expected.getId());
 
@@ -49,8 +49,8 @@ class UserServiceImplIntegrationTest {
                 .email("email@email.com")
                 .name("name")
                 .build();
-        UserDto userDto1 = userService.addUser(userDto);
-        UserDto userDto2 = userService.addUser(userDtoForSave);
+        UserDto userDto1 = userService.create(userDto);
+        UserDto userDto2 = userService.create(userDtoForSave);
         List<UserDto> expected = List.of(userDto1, userDto2);
 
         Collection<UserDto> actual = userService.getUsers();
@@ -64,9 +64,9 @@ class UserServiceImplIntegrationTest {
                 .email("email@email.com")
                 .name("name")
                 .build();
-        UserDto oldUser = userService.addUser(userDto);
+        UserDto oldUser = userService.create(userDto);
 
-        UserDto actual = userService.updateUser(userDtoForUpdate, oldUser.getId());
+        UserDto actual = userService.update(userDtoForUpdate, oldUser.getId());
         userDtoForUpdate.setId(oldUser.getId());
 
         assertThat(actual).usingRecursiveComparison().isEqualTo(userDtoForUpdate);
@@ -74,9 +74,9 @@ class UserServiceImplIntegrationTest {
 
     @Test
     void whenDeleteUser() {
-        UserDto savedUser = userService.addUser(userDto);
+        UserDto savedUser = userService.create(userDto);
 
-        userService.deleteUser(savedUser.getId());
+        userService.delete(savedUser.getId());
         Collection<UserDto> actual = userService.getUsers();
 
         assertThat(actual).isEmpty();
@@ -88,8 +88,8 @@ class UserServiceImplIntegrationTest {
                 .email("email@email.com")
                 .name("name")
                 .build();
-        userService.addUser(userDto);
-        userService.addUser(userDtoForSave);
+        userService.create(userDto);
+        userService.create(userDtoForSave);
 
         userService.clearAll();
         Collection<UserDto> actual = userService.getUsers();

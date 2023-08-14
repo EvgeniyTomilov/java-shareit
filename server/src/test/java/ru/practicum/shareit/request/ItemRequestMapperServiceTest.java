@@ -6,14 +6,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.practicum.shariet.exception.IncorrectIdException;
-import ru.practicum.shariet.exception.UserNotFoundException;
-import ru.practicum.shariet.item.dto.ItemDto;
+import ru.practicum.shareit.exception.IncorrectIdException;
+import ru.practicum.shareit.exception.UserNotFoundException;
+import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
-import ru.practicum.shariet.request.dto.ItemRequestDto;
-import ru.practicum.shareit.request.dto.ItemRequestMapperServiceImpl;
+import ru.practicum.shareit.request.dto.ItemRequestDto;
+import ru.practicum.shareit.request.dto.ItemRequestMapperService;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.dto.UserMapper;
@@ -40,7 +40,7 @@ class ItemRequestMapperServiceTest {
     @Mock
     private ItemRepository itemRepo;
     @InjectMocks
-    private ItemRequestMapperServiceImpl itemRequestMapperService;
+    private ItemRequestMapperService itemRequestMapperService;
 
     @BeforeEach
     void setUp() {

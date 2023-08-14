@@ -7,9 +7,8 @@ import ru.practicum.shareit.booking.dto.BookingMapperService;
 import ru.practicum.shareit.booking.dto.BookingRequestDto;
 import ru.practicum.shareit.booking.dto.BookingResponseDto;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
-import ru.practicum.shariet.booking.dto.BookingState;
 import ru.practicum.shareit.booking.repository.BookingRepository;
-import ru.practicum.shariet.exception.BookingNotFoundException;
+import ru.practicum.shareit.exception.BookingNotFoundException;
 
 import java.util.List;
 
@@ -44,12 +43,12 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingResponseDto> getBookings(Long bookerId, BookingState state, Integer from, Integer size) {
+    public List<BookingResponseDto> getBookings(Long bookerId, StateForBooking state, Integer from, Integer size) {
         return bookingMapperService.prepareResponseDtoList(bookerId, state, from, size);
     }
 
     @Override
-    public List<BookingResponseDto> getBookingsForOwner(Long ownerId, BookingState state,
+    public List<BookingResponseDto> getBookingsForOwner(Long ownerId, StateForBooking state,
                                                         int from, int size) {
         return bookingMapperService.prepareResponseDtoListForOwner(ownerId, state, from, size);
     }

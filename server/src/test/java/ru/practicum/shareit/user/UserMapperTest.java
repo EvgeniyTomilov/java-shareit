@@ -91,5 +91,4 @@ class UserMapperTest {
         User userFromMapper = UserMapper.makeUserWithId(newUserDto).orElseThrow();
         assertEquals(user, userFromMapper);
     }
-
 }

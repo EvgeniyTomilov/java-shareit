@@ -4,14 +4,14 @@ import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
-import ru.practicum.shariet.item.dto.CommentDto;
+
 
 import java.time.LocalDateTime;
 
 @UtilityClass
 public final class CommentMapper {
 
-    public Comment requestToEntity(Item item, User author, String text) {
+    public static Comment requestToEntity(Item item, User author, String text) {
         Comment newComment = new Comment();
         newComment.setItem(item);
         newComment.setAuthor(author);
@@ -20,7 +20,7 @@ public final class CommentMapper {
         return newComment;
     }
 
-    public CommentDto entityToDto(Comment comment) {
+    public static CommentDto entityToDto(Comment comment) {
         CommentDto commentDto = new CommentDto();
         commentDto.setId(comment.getId());
         commentDto.setText(comment.getText());
