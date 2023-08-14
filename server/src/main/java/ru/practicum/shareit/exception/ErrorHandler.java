@@ -6,8 +6,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.io.UncheckedIOException;
-
 @RestControllerAdvice
 public class ErrorHandler {
 
@@ -36,9 +34,9 @@ public class ErrorHandler {
     }
 
 
-    @ExceptionHandler(UncheckedIOException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse handleInternalError(final Throwable e) {
-        return new ErrorResponse(e.getMessage());
-    }
+//    @ExceptionHandler(UncheckedIOException.class)
+//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+//    public ErrorResponse handleInternalError(final Throwable e) {
+//        return new ErrorResponse(e.getMessage());
+//    }
 }
