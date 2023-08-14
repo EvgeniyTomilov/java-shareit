@@ -1,6 +1,5 @@
 package ru.practicum.shariet.exception;
 
-import org.springframework.core.convert.ConversionFailedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -21,7 +20,7 @@ public class ErrorHandler {
         );
     }
 
-    @ExceptionHandler(ConversionFailedException.class)
+    @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleConversionFailedException(final RuntimeException e) {
 
