@@ -5,4 +5,5 @@ public enum StatusOfBooking {
     APPROVED,
     REJECTED,
     CANCELED,
+
 }

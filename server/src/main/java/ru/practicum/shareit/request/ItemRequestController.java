@@ -8,7 +8,7 @@ import ru.practicum.shareit.request.model.ItemRequestService;
 
 import java.util.List;
 
-import static ru.practicum.shareit.util.Utils.SHARER_USER_ID;
+import static ru.practicum.shareit.utils.HeaderUserIdConst.HEADER_USER_ID;
 
 @Validated
 @RestController
@@ -22,7 +22,7 @@ public class ItemRequestController {
     }
 
     @PostMapping
-    ItemRequestDto addRequest(@RequestHeader(SHARER_USER_ID) Long requesterId,
+    ItemRequestDto addRequest(@RequestHeader(HEADER_USER_ID) Long requesterId,
                               @RequestBody ItemRequestDto itemRequestDto) {
         log.info("SERVER: Add new request: {} by user id {} - Started", itemRequestDto, requesterId);
         ItemRequestDto itemRequestDtoFromRepo = itemRequestService.addNewItemRequest(requesterId, itemRequestDto);
@@ -31,7 +31,7 @@ public class ItemRequestController {
     }
 
     @GetMapping
-    List<ItemRequestDto> getItemRequests(@RequestHeader(SHARER_USER_ID) Long requesterId) {
+    List<ItemRequestDto> getItemRequests(@RequestHeader(HEADER_USER_ID) Long requesterId) {
         log.info("SERVER: Get requests for user id: {} - Started", requesterId);
         List<ItemRequestDto> listOfRequestsDto = itemRequestService.getItemRequests(requesterId);
         log.info("SERVER: Size of founded List of requests is {} - Finished", listOfRequestsDto.size());
@@ -39,7 +39,7 @@ public class ItemRequestController {
     }
 
     @GetMapping("/all")
-    List<ItemRequestDto> getAllItemRequests(@RequestHeader(SHARER_USER_ID) Long userId,
+    List<ItemRequestDto> getAllItemRequests(@RequestHeader(HEADER_USER_ID) Long userId,
                                             @RequestParam(required = false, defaultValue = "0") Integer from,
                                             @RequestParam(required = false, defaultValue = "20") Integer size) {
 
@@ -50,7 +50,7 @@ public class ItemRequestController {
     }
 
     @GetMapping("/{requestId}")
-    ItemRequestDto getItemRequest(@RequestHeader(SHARER_USER_ID) Long userId,
+    ItemRequestDto getItemRequest(@RequestHeader(HEADER_USER_ID) Long userId,
                                   @PathVariable Long requestId) {
         log.info("SERVER: Get request id: {} - Started", requestId);
         ItemRequestDto requestItemDto = itemRequestService.getItemRequest(userId, requestId);

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.ItemRequestNotFoundException;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestMapperService;
-import ru.practicum.shareit.request.repository.ItemRequestRepository;
+import ru.practicum.shareit.request.repo.ItemRequestRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;

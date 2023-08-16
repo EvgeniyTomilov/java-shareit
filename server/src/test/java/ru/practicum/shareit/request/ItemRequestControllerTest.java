@@ -14,7 +14,7 @@ import ru.practicum.shareit.exception.ItemRequestNotFoundException;
 import ru.practicum.shareit.exception.UserNotFoundException;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.model.ItemRequestServiceImpl;
-import ru.practicum.shareit.request.repository.ItemRequestRepository;
+import ru.practicum.shareit.request.repo.ItemRequestRepository;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;

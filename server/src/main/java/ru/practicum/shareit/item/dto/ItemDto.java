@@ -37,3 +37,4 @@ public class ItemDto {
         return Objects.hash(name, description, ownerId);
     }
 }
+

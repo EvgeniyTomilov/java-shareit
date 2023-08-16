@@ -1,6 +1,5 @@
 package ru.practicum.shareit.booking;
 
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -11,8 +10,7 @@ import ru.practicum.shareit.booking.model.StateForBooking;
 
 import java.util.List;
 
-import static ru.practicum.shareit.util.Utils.SHARER_USER_ID;
-
+import static ru.practicum.shareit.utils.HeaderUserIdConst.HEADER_USER_ID;
 
 @Validated
 @Slf4j
@@ -26,7 +24,7 @@ public class BookingController {
     }
 
     @PostMapping
-    public BookingResponseDto add(@RequestHeader(SHARER_USER_ID) Long bookerId,
+    public BookingResponseDto add(@RequestHeader(HEADER_USER_ID) Long bookerId,
                                   @RequestBody BookingRequestDto bookingDto) {
         log.info("SERVER: Add new booking: {} - Started", bookingDto);
         BookingResponseDto bookingDtoFromRepo = bookingService.addNewBooking(bookerId, bookingDto);
@@ -35,7 +33,7 @@ public class BookingController {
     }
 
     @PatchMapping("/{bookingId}")
-    public BookingResponseDto approve(@RequestHeader(SHARER_USER_ID) Long ownerId,
+    public BookingResponseDto approve(@RequestHeader(HEADER_USER_ID) Long ownerId,
                                       @PathVariable Long bookingId,
                                       @RequestParam Boolean approved) {
         log.info("SERVER: Set status {} for booking id: {} by user id {}  - Started", approved, bookingId, ownerId);
@@ -45,7 +43,7 @@ public class BookingController {
     }
 
     @GetMapping("/{bookingId}")
-    public BookingResponseDto getBooking(@RequestHeader(SHARER_USER_ID) Long userId,
+    public BookingResponseDto getBooking(@RequestHeader(HEADER_USER_ID) Long userId,
                                          @PathVariable Long bookingId) {
         log.info("SERVER: Search for booking id {} - Started", bookingId);
         BookingResponseDto bookingResponseDto = bookingService.getBooking(bookingId, userId);
@@ -54,10 +52,10 @@ public class BookingController {
     }
 
     @GetMapping
-    public List<BookingResponseDto> getBookings(@RequestHeader(SHARER_USER_ID) Long bookerId,
+    public List<BookingResponseDto> getBookings(@RequestHeader(HEADER_USER_ID) Long bookerId,
                                                 @RequestParam(defaultValue = "ALL") StateForBooking state,
-                                                @RequestParam(defaultValue = "0") Integer from,
-                                                @RequestParam(defaultValue = "20") Integer size) {
+                                                @RequestParam(required = false, defaultValue = "0") Integer from,
+                                                @RequestParam(required = false, defaultValue = "20") Integer size) {
         log.info("SERVER: Search user's (id {}) {} bookings - Started", bookerId, state);
         List<BookingResponseDto> bookingsOfUser = bookingService.getBookings(bookerId, state, from, size);
         log.info("SERVER: {} {} bookings was found", bookingsOfUser.size(), state);
@@ -65,10 +63,10 @@ public class BookingController {
     }
 
     @GetMapping("/owner")
-    public List<BookingResponseDto> getBookingsOwner(@RequestHeader(SHARER_USER_ID) Long ownerId,
+    public List<BookingResponseDto> getBookingsOwner(@RequestHeader(HEADER_USER_ID) Long ownerId,
                                                      @RequestParam(defaultValue = "ALL") StateForBooking state,
-                                                     @RequestParam(defaultValue = "0") Integer from,
-                                                     @RequestParam(defaultValue = "20") Integer size) {
+                                                     @RequestParam(required = false, defaultValue = "0") Integer from,
+                                                     @RequestParam(required = false, defaultValue = "20") Integer size) {
         log.info("SERVER: Search {} bookings of owner's (id {}) items - Started", state, ownerId);
         List<BookingResponseDto> bookingsOfOwnerItems =
                 bookingService.getBookingsForOwner(ownerId, state, from, size);
