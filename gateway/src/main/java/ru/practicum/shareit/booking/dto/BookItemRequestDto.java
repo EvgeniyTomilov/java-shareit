@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BookItemRequestDto {
-    @NotNull(message = "Бронирование невозможно без указания Item Id")
+
     private long itemId;
     @FutureOrPresent
     @NotNull(message = "Время начала бронирования не может быть пустым")
