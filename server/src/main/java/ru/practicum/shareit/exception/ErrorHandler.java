@@ -14,6 +14,7 @@ public class ErrorHandler {
     @ExceptionHandler(value = {ValidationException.class, IncorrectItemDtoException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleValidationException(final RuntimeException e) {
+        log.info("400 {}", e.getMessage(), e);
         return new ErrorResponse(
                 e.getMessage()
         );
@@ -22,7 +23,7 @@ public class ErrorHandler {
     @ExceptionHandler(ConversionFailedException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleConversionFailedException(final RuntimeException e) {
-
+        log.info("400 {}", e.getMessage(), e);
         return new ErrorResponse("Unknown state: UNSUPPORTED_STATUS");
     }
 
@@ -30,6 +31,7 @@ public class ErrorHandler {
             IncorrectIdException.class, BookingNotFoundException.class, ItemRequestNotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNotFoundException(final RuntimeException e) {
+        log.info("404 {}", e.getMessage(), e);
         return new ErrorResponse(
                 e.getMessage()
         );
