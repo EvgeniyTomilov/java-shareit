@@ -65,10 +65,7 @@ public class BookingController {
     public ResponseEntity<Object> approve(@Positive @RequestHeader(HEADER_USER_ID) Long ownerId,
                                           @Positive @PathVariable Long bookingId,
                                           @RequestParam Boolean approved) {
-        if (approved == null) {
-            log.warn("статус подтверждения не может быть пустым");
-            throw new ValidationException("Approve validation error. Status is null");
-        }
+
         log.info("GATEWAY: Set status {} for booking id: {} by user id {}  - Started", approved, bookingId, ownerId);
         return bookingClient.approveBooking(ownerId, bookingId, approved);
     }

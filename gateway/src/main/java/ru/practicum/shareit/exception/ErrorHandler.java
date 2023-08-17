@@ -1,5 +1,7 @@
 package ru.practicum.shareit.exception;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.convert.ConversionFailedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -8,10 +10,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import javax.validation.ConstraintViolationException;
 
 @RestControllerAdvice
+@Slf4j
 public class ErrorHandler {
 
-    @ExceptionHandler(value = {ValidationException.class, IncorrectItemDtoException.class,
-            ConstraintViolationException.class})
+    @ExceptionHandler(value = {ValidationException.class, IncorrectItemDtoException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleValidationException(final RuntimeException e) {
         return new ErrorResponse(
@@ -19,7 +21,7 @@ public class ErrorHandler {
         );
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
+    @ExceptionHandler(ConversionFailedException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleConversionFailedException(final RuntimeException e) {
 
@@ -34,5 +36,12 @@ public class ErrorHandler {
                 e.getMessage()
         );
     }
+
+//    @ExceptionHandler
+//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+//    public ErrorResponse handleThrowable(final Throwable e) {
+//        log.info("500 {}", e.getMessage(), e);
+//        return new ErrorResponse(e.getMessage());
+//    }
 
 }
